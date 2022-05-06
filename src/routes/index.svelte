@@ -1,2 +1,30 @@
-<h1>Welcome to SvelteKit</h1>
-<p>Visit <a href="https://kit.svelte.dev">kit.svelte.dev</a> to read the documentation</p>
+<script context="module">
+	export const prerender = false;
+	// export const ssr = false;
+</script>
+
+<script>
+	import Force from '$lib/Force.svelte';
+	import Tree from '$lib/Tree.svelte';
+	import InputRecursive from '$lib/InputRecursive.svelte';
+	import Input from '$lib/Input.svelte';
+	import List from '$lib/List.svelte';
+	import Selection from '$lib/Selection.svelte';
+</script>
+
+<svelte:head>
+	<title>VV IIIF</title>
+</svelte:head>
+
+<section>
+	<!-- <InputRecursive /> -->
+	<Input />
+	<!-- <Test /> -->
+	<!-- <Force /> -->
+	<!-- <Tree /> -->
+	<List />
+	<Selection />
+</section>
+
+<style>
+</style>

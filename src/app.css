@@ -1,0 +1,28 @@
+@import "@fontsource/fira-mono";
+
+/* app.css */
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+
+  h1,
+  h2,
+  h3,
+  h4 {
+    @apply font-bold;
+  }
+}
+
+*,
+:after,
+:before {
+  box-sizing: border-box;
+  border: 0 solid #e5e7eb;
+}
+
+html {
+  height: 100%;
+}
