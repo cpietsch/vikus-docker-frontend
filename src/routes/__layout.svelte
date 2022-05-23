@@ -16,10 +16,11 @@
 			<nav id="nav" class="lg:text-sm lg:leading-6 relative">
 				<div class="sticky top-0 -ml-0.5 pointer-events-none">
 					<div class="h-10 " />
-					<div class="relative pointer-events-auto">
-						<button
+					<div class="relative flex text-center pointer-events-auto">
+						<a
+							href="/new"
 							class="w-full py-2 px-3 bg-cyan-500 text-white text-sm font-semibold rounded-md shadow-lg hover:shadow-cyan-500/50 focus:outline-none"
-							>New Instance</button
+							>New Instance</a
 						>
 					</div>
 				</div>

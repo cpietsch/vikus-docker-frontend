@@ -36,7 +36,7 @@ export const post = async ({ request, locals }) => {
 const redirect = {
 	status: 303,
 	headers: {
-		location: '/todos'
+		location: '/'
 	}
 };
 
@@ -51,10 +51,10 @@ export const patch = async ({ request, locals }) => {
 	return redirect;
 };
 
-export const del = async ({ request, locals }) => {
+export const del = async ({ request }) => {
 	const form = await request.formData();
 
-	await api('delete', `todos/${locals.userid}/${form.get('uid')}`);
+	await api('delete', `instances/${form.get('id')}`);
 
 	return redirect;
 };
