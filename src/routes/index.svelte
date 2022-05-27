@@ -1,6 +1,5 @@
 <script context="module">
 	export const prerender = false;
-	// export const ssr = false;
 </script>
 
 <script>

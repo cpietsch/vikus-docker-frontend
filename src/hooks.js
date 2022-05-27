@@ -6,7 +6,9 @@ export const handle = async ({ event, resolve }) => {
 	const cookies = cookie.parse(event.request.headers.get('cookie') || '');
 	event.locals.userid = cookies['userid'] || uuid();
 
-	const response = await resolve(event);
+	const response = await resolve(event, {
+		ssr: false,
+	});
 
 	if (!cookies['userid']) {
 		// if this is the first time the user has visited this app,

@@ -1,16 +1,16 @@
 <script context="module">
-	console.log('module');
 	export async function load({ params, fetch, session, stuff }) {
-		console.log('module2');
 		const url = `http://localhost:5000/instances`;
-		const response = await fetch(url);
-
-		return {
-			//status: response.status,
-			props: {
-				instances: response.ok && (await response.json())
-			}
-		};
+		try {
+			const response = await fetch(url);
+			return {
+				//status: response.status,
+				props: {
+					instances: response.ok && (await response.json())
+				}
+			};
+		} catch (error) {}
+		return {};
 	}
 </script>
 
@@ -21,9 +21,7 @@
 	import InstanceList from '$lib/InstanceList.svelte';
 	// import InstanceList from 'src/routes/instances/index.svelte';
 
-	let instances = [];
-
-	$: console.log(instances);
+	export let instances = [];
 </script>
 
 <Header />

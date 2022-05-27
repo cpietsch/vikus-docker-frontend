@@ -8,7 +8,6 @@ const config = {
 	preprocess: preprocess(),
 	kit: {
 		prerender: { default: false, entries: [], enabled: false },
-
 		methodOverride: {
 			allowed: ['PUT', 'PATCH', 'DELETE']
 		},
