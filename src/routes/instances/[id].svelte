@@ -43,7 +43,9 @@
 	$: console.log(socketEvents);
 
 	const crawlManifest = async () => {
-		const response = await fetch('http://' + domain + '/instances/' + instance.id + '/crawl');
+		const response = await fetch(
+			'http://' + domain + '/instances/' + instance.id + '/crawlCollection'
+		);
 		const data = await response.json();
 		console.log(data);
 	};
@@ -145,6 +147,11 @@
 		on:click={crawlManifest}
 		class="py-2 px-3 w-40 bg-cyan-500 text-white text-sm font-semibold rounded-md shadow-lg hover:shadow-cyan-500/50 focus:outline-none"
 		>Crawl Collection</button
+	>
+	<button
+		on:click={crawlImages}
+		class="py-2 px-3 w-40 bg-cyan-500 text-white text-sm font-semibold rounded-md shadow-lg hover:shadow-cyan-500/50 focus:outline-none"
+		>Crawl Images</button
 	>
 	<form action="/instances?_method=DELETE" method="post">
 		<input type="hidden" name="id" value={instance.id} />
