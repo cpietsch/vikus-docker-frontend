@@ -2,58 +2,46 @@
 	export let instance;
 
 	import { onDestroy } from 'svelte';
-	import { domain, api } from '$lib/api';
+	import { domain, protocoll, api } from '$lib/api';
 	import { goto } from '$app/navigation';
 
-	const protocoll = 'ws';
-
-	let socketEvents = [];
-	let socketConnected = false;
+	let events = [];
+	let connected = false;
 	let task = null;
 	let progress = 0;
 
-	const socket = new WebSocket(`${protocoll}://${domain}/instances/${instance.id}/ws`);
+	const eventSource = new EventSource(`${protocoll}://${domain}/instances/${instance.id}/events`);
 
-	socket.addEventListener('open', function (event) {
-		console.log("It's open");
-		socketConnected = true;
-	});
-
-	socket.addEventListener('message', function (event) {
+	eventSource.onopen = (e) => {
+		console.log('eventSource.onopen', e);
+		connected = true;
+	};
+	eventSource.onerror = (e) => {
+		console.log('eventSource.onerror', e);
+		connected = false;
+	};
+	eventSource.onmessage = (event) => {
 		const data = JSON.parse(event.data);
-		if (data.task && data.task.startsWith('crawling')) {
-			task = 'crawling';
-			// progress = (data.completed / (data.queue + data.completed)) * 100;
-			progress = data.queue;
-			console.log(progress);
-		}
 		console.log(data);
-		// socketEvents.push(JSON.parse(event.data));
-	});
-
-	socket.addEventListener('close', function (event) {
-		console.log("It's closed");
-		socketConnected = false;
-	});
+	};
 
 	onDestroy(() => {
 		console.log("It's destroyed");
-		socket.close();
+		eventSource.close();
+		// socket.close();
 	});
 
 	$: console.log(instance);
-	$: console.log(socketEvents);
+	// $: console.log(socketEvents);
 
 	const crawlManifest = async () => {
-		const response = await fetch(
-			'http://' + domain + '/instances/' + instance.id + '/crawlCollection'
-		);
+		const response = await api('GET', `instances/${instance.id}/crawlCollection`);
 		const data = await response.json();
 		console.log(data);
 	};
 
 	const crawlImages = async () => {
-		const response = await fetch('http://' + domain + '/instances/' + instance.id + '/crawlImages');
+		const response = await api('GET', `instances/${instance.id}/crawlImages`);
 		const data = await response.json();
 		console.log(data);
 	};
@@ -135,11 +123,11 @@
 			<p>Socket</p>
 			<div class="flex items-end text-xs">
 				<span
-					class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full {socketConnected
+					class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full {connected
 						? 'bg-green-100'
-						: 'bg-red-100'} text-{socketConnected ? 'green-800' : 'red-800'}"
+						: 'bg-red-100'} text-{connected ? 'green-800' : 'red-800'}"
 				>
-					{socketConnected ? 'Connected' : 'Disconnected'}
+					{connected ? 'Connected' : 'Disconnected'}
 				</span>
 			</div>
 		</div>
