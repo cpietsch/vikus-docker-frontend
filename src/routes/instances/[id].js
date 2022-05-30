@@ -1,5 +1,4 @@
-import { api } from './_api';
-
+import { api } from '$lib/api';
 
 /** @type {import('./[id]').RequestHandler} */
 export async function get({ params }) {

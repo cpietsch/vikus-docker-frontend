@@ -6,7 +6,7 @@
 	import Force from '$lib/Force.svelte';
 	import Tree from '$lib/Tree.svelte';
 	import InputRecursive from '$lib/InputRecursive.svelte';
-	import Input from '$lib/Input.svelte';
+	import NewInstanceForm from '$lib/NewInstanceForm.svelte';
 	import List from '$lib/List.svelte';
 	import Selection from '$lib/Selection.svelte';
 </script>
@@ -17,7 +17,7 @@
 
 <section>
 	<!-- <InputRecursive /> -->
-	<Input />
+	<NewInstanceForm />
 	<!-- <Test /> -->
 	<!-- <Force /> -->
 	<!-- <Tree /> -->

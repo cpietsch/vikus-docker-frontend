@@ -2,15 +2,17 @@
 	export let instance;
 
 	import { onDestroy } from 'svelte';
+	import { domain, api } from '$lib/api';
+	import { goto } from '$app/navigation';
 
-	const domain = 'localhost:5000';
+	const protocoll = 'ws';
 
 	let socketEvents = [];
 	let socketConnected = false;
 	let task = null;
 	let progress = 0;
 
-	const socket = new WebSocket('ws://' + domain + '/instances/' + instance.id + '/ws');
+	const socket = new WebSocket(`${protocoll}://${domain}/instances/${instance.id}/ws`);
 
 	socket.addEventListener('open', function (event) {
 		console.log("It's open");
@@ -58,11 +60,13 @@
 
 	const deleteIntance = async () => {
 		socket.close();
-		const response = await fetch('http://' + domain + '/instances/' + instance.id, {
-			method: 'DELETE'
-		});
+
+		const response = await api('DELETE', `instances/${instance.id}`);
 		const data = await response.json();
-		console.log(data);
+		// console.log(data);
+		if (response.ok) {
+			goto('/');
+		}
 	};
 </script>
 
@@ -153,13 +157,11 @@
 		class="py-2 px-3 w-40 bg-cyan-500 text-white text-sm font-semibold rounded-md shadow-lg hover:shadow-cyan-500/50 focus:outline-none"
 		>Crawl Images</button
 	>
-	<form action="/instances?_method=DELETE" method="post">
-		<input type="hidden" name="id" value={instance.id} />
-		<button
-			class="py-2 px-3 w-32 bg-red-500 text-white text-sm font-semibold rounded-md shadow-lg hover:shadow-red-500/50 focus:outline-none"
-			>Delete</button
-		>
-	</form>
+	<button
+		on:click={deleteIntance}
+		class="py-2 px-3 w-32 bg-red-500 text-white text-sm font-semibold rounded-md shadow-lg hover:shadow-red-500/50 focus:outline-none"
+		>Delete</button
+	>
 </div>
 
 {#if task && task.startsWith('crawling')}
