@@ -47,7 +47,7 @@
 	};
 
 	const deleteIntance = async () => {
-		socket.close();
+		eventSource.close();
 
 		const response = await api('DELETE', `instances/${instance.id}`);
 		const data = await response.json();
