@@ -10,7 +10,8 @@
 	let task = null;
 	let progress = 0;
 
-	const eventSource = new EventSource(`${protocoll}://${domain}/instances/${instance.id}/events`);
+	// const eventSource = new EventSource(`${protocoll}://${domain}/instances/${instance.id}/events`);
+	const eventSource = new WebSocket(`ws://${domain}/instances/${instance.id}/ws`);
 
 	eventSource.onopen = (e) => {
 		console.log('eventSource.onopen', e);
@@ -22,7 +23,11 @@
 	};
 	eventSource.onmessage = (event) => {
 		const data = JSON.parse(event.data);
-		console.log(data);
+
+		if (data.task) {
+			task = data;
+			console.log(data);
+		}
 	};
 
 	onDestroy(() => {
@@ -37,7 +42,7 @@
 	const crawlManifest = async () => {
 		const response = await api('GET', `instances/${instance.id}/crawlCollection`);
 		const data = await response.json();
-		console.log(data);
+		console.log('crawlManifest', data);
 	};
 
 	const crawlImages = async () => {
@@ -47,7 +52,7 @@
 	};
 
 	const deleteIntance = async () => {
-		socket.close();
+		eventSource.close();
 
 		const response = await api('DELETE', `instances/${instance.id}`);
 		const data = await response.json();
@@ -152,7 +157,7 @@
 	>
 </div>
 
-{#if task && task.startsWith('crawling')}
+{#if task && task?.task.startsWith('crawling')}
 	<div class="relative mt-8">
 		<div class="flex mb-2 items-center justify-between">
 			<div>
