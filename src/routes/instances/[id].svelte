@@ -4,11 +4,11 @@
 	import { onDestroy } from 'svelte';
 	import { domain, protocoll, api } from '$lib/api';
 	import { goto } from '$app/navigation';
+	import { get } from 'svelte/store';
 
 	let events = [];
 	let connected = false;
-	let task = null;
-	let progress = 0;
+	let progress = null;
 
 	// const eventSource = new EventSource(`${protocoll}://${domain}/instances/${instance.id}/events`);
 	const eventSource = new WebSocket(`ws://${domain}/instances/${instance.id}/ws`);
@@ -24,9 +24,8 @@
 	eventSource.onmessage = (event) => {
 		const data = JSON.parse(event.data);
 
-		if (data.task) {
-			task = data;
-			console.log(data);
+		if (data.task && data.task.startsWith('crawling')) {
+			progress = data;
 		}
 	};
 
@@ -39,16 +38,35 @@
 	$: console.log(instance);
 	// $: console.log(socketEvents);
 
-	const crawlManifest = async () => {
-		const response = await api('GET', `instances/${instance.id}/crawlCollection`);
-		const data = await response.json();
-		console.log('crawlManifest', data);
+	const crawlCollection = async () => {
+		const data = await getApiFunction('crawlCollection');
 	};
 
 	const crawlImages = async () => {
-		const response = await api('GET', `instances/${instance.id}/crawlImages`);
+		const data = await getApiFunction('crawlImages');
+	};
+
+	const makeSpritesheets = async () => {
+		const data = await getApiFunction('makeSpritesheets');
+	};
+
+	const makeMetadata = async () => {
+		const data = await getApiFunction('makeMetadata');
+	};
+
+	const makeFeatures = async () => {
+		const data = await getApiFunction('makeFeatures');
+	};
+
+	const makeUmap = async () => {
+		const data = await getApiFunction('makeUmap');
+	};
+
+	const getApiFunction = async (func) => {
+		const response = await api('GET', `instances/${instance.id}/${func}`);
 		const data = await response.json();
 		console.log(data);
+		return data;
 	};
 
 	const deleteIntance = async () => {
@@ -137,11 +155,35 @@
 			</div>
 		</div>
 	</div>
+	{#if progress}
+		<div class="relative mt-8">
+			<div class="flex mb-2 items-center justify-between">
+				<div>
+					<span
+						class="text-xs font-semibold inline-block py-1 px-2 uppercase rounded-full text-green-600 bg-green-200"
+					>
+						{progress.task}
+					</span>
+				</div>
+				<div class="text-right">
+					<span class="text-xs font-semibold inline-block text-green-600">
+						Queue: {progress.queue}, Completed {progress.completed}
+					</span>
+				</div>
+			</div>
+			<div class="overflow-hidden h-2 mb-4 text-xs flex rounded bg-green-200">
+				<div
+					style="width: {parseInt(progress.progress * 100)}%"
+					class="shadow-none flex flex-col text-center whitespace-nowrap text-white justify-center bg-green-500"
+				/>
+			</div>
+		</div>
+	{/if}
 </div>
 
 <div class="flex flex-row space-x-4  shadow-xl rounded-xl p-8 bg-white  mt-7">
 	<button
-		on:click={crawlManifest}
+		on:click={crawlCollection}
 		class="py-2 px-3 w-40 bg-cyan-500 text-white text-sm font-semibold rounded-md shadow-lg hover:shadow-cyan-500/50 focus:outline-none"
 		>Crawl Collection</button
 	>
@@ -151,31 +193,28 @@
 		>Crawl Images</button
 	>
 	<button
+		on:click={makeSpritesheets}
+		class="py-2 px-3 w-40 bg-cyan-500 text-white text-sm font-semibold rounded-md shadow-lg hover:shadow-cyan-500/50 focus:outline-none"
+		>Make Spritesheets</button
+	>
+	<button
+		on:click={makeMetadata}
+		class="py-2 px-3 w-40 bg-cyan-500 text-white text-sm font-semibold rounded-md shadow-lg hover:shadow-cyan-500/50 focus:outline-none"
+		>Make Metadata</button
+	>
+	<button
+		on:click={makeFeatures}
+		class="py-2 px-3 w-40 bg-cyan-500 text-white text-sm font-semibold rounded-md shadow-lg hover:shadow-cyan-500/50 focus:outline-none"
+		>Make Features</button
+	>
+	<button
+		on:click={makeUmap}
+		class="py-2 px-3 w-40 bg-cyan-500 text-white text-sm font-semibold rounded-md shadow-lg hover:shadow-cyan-500/50 focus:outline-none"
+		>Make Umap</button
+	>
+	<button
 		on:click={deleteIntance}
 		class="py-2 px-3 w-32 bg-red-500 text-white text-sm font-semibold rounded-md shadow-lg hover:shadow-red-500/50 focus:outline-none"
 		>Delete</button
 	>
 </div>
-
-{#if task && task?.task.startsWith('crawling')}
-	<div class="relative mt-8">
-		<div class="flex mb-2 items-center justify-between">
-			<div>
-				<span
-					class="text-xs font-semibold inline-block py-1 px-2 uppercase rounded-full text-green-600 bg-green-200"
-				>
-					{task}
-				</span>
-			</div>
-			<div class="text-right">
-				<span class="text-xs font-semibold inline-block text-green-600"> queue {progress} </span>
-			</div>
-		</div>
-		<div class="overflow-hidden h-2 mb-4 text-xs flex rounded bg-green-200">
-			<div
-				style="width:20%"
-				class="shadow-none flex flex-col text-center whitespace-nowrap text-white justify-center bg-green-500"
-			/>
-		</div>
-	</div>
-{/if}
