@@ -1,5 +1,5 @@
 export const protocoll = 'http';
-export const domain = 'localhost:5000';
+export const domain = location.hostname + ':5000';
 
 export function api(method, resource, data) {
 	// console.log(`${base}${resource}`);

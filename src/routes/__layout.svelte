@@ -1,6 +1,6 @@
 <script context="module">
 	export async function load({ params, fetch, session, stuff }) {
-		const url = `http://localhost:5000/instances`;
+		const url = `http://${location.hostname}:5000/instances`;
 		try {
 			const response = await fetch(url);
 			return {

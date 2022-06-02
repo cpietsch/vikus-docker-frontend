@@ -1,8 +1,22 @@
+<script context="module">
+	import { api } from '$lib/api';
+	export async function load({ params, fetch, session, stuff }) {
+		const response = await api('get', `instances/${params.id}`);
+
+		return {
+			status: response.status,
+			props: {
+				instance: response.ok && (await response.json())
+			}
+		};
+	}
+</script>
+
 <script>
 	export let instance;
 
 	import { onDestroy } from 'svelte';
-	import { domain, protocoll, api } from '$lib/api';
+	import { domain, protocoll } from '$lib/api';
 	import { goto } from '$app/navigation';
 	import { get } from 'svelte/store';
 
