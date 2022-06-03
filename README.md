@@ -1,4 +1,9 @@
-# create-svelte
+# vikus-docker-frontend
+VIKUS Docker instance builder FRONTEND
+
+## WORK IN PROGRESS
+This is a preview of the VIKUS Viewer Docker instance builder
+
 
 Everything you need to build a Svelte project, powered by [`create-svelte`](https://github.com/sveltejs/kit/tree/master/packages/create-svelte).
 
