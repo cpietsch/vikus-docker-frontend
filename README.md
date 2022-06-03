@@ -3,6 +3,7 @@ VIKUS Docker instance builder FRONTEND
 
 ## WORK IN PROGRESS
 This is a preview of the VIKUS Viewer Docker instance builder
+https://github.com/cpietsch/vikus-docker
 
 
 ## Developing
