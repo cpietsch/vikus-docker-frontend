@@ -134,7 +134,7 @@
 		<p>Created</p>
 		<div class="flex items-end text-xs">{new Date(instance.created * 1000)}</div>
 	</div>
-	<div
+	<!-- <div
 		class="flex items-center pb-2 mb-2 text-sm space-x-12 md:space-x-24 justify-between border-b border-gray-200 dark:border-slate-600"
 	>
 		<p>Status</p>
@@ -145,6 +145,18 @@
 				{instance.status}
 			</span>
 		</div>
+	</div> -->
+	<div
+		class="flex items-center pb-2 mb-2 text-sm space-x-12 md:space-x-24 justify-between border-b border-gray-200 dark:border-slate-600"
+	>
+		<p>Manifests</p>
+		<div class="flex items-end text-xs">{instance.manifests}</div>
+	</div>
+	<div
+		class="flex items-center pb-2 mb-2 text-sm space-x-12 md:space-x-24 justify-between border-b border-gray-200 dark:border-slate-600"
+	>
+		<p>Images</p>
+		<div class="flex items-end text-xs">{instance.images}</div>
 	</div>
 	<div
 		class="flex items-center pb-2 mb-2 text-sm space-x-12 md:space-x-24 justify-between border-b border-gray-200 dark:border-slate-600"
