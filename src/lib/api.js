@@ -1,9 +1,10 @@
 export const protocoll = 'http';
-export const domain = location.hostname + ':5000';
+export const domain = location.hostname;
+export const port = 5000
 
 export function api(method, resource, data) {
 	// console.log(`${base}${resource}`);
-	return fetch(`${protocoll}://${domain}/${resource}`, {
+	return fetch(`${protocoll}://${domain}:${port}/${resource}`, {
 		method,
 		headers: {
 			'content-type': 'application/json'

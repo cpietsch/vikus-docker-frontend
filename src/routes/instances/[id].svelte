@@ -16,16 +16,17 @@
 	export let instance;
 
 	import { onDestroy } from 'svelte';
-	import { domain, protocoll } from '$lib/api';
+	import { domain, protocoll, port } from '$lib/api';
 	import { goto } from '$app/navigation';
 	import { get } from 'svelte/store';
 
 	let events = [];
 	let connected = false;
 	let progress = null;
+	let loading = false;
 
 	// const eventSource = new EventSource(`${protocoll}://${domain}/instances/${instance.id}/events`);
-	const eventSource = new WebSocket(`ws://${domain}/instances/${instance.id}/ws`);
+	const eventSource = new WebSocket(`ws://${domain}:${port}/instances/${instance.id}/ws`);
 
 	eventSource.onopen = (e) => {
 		console.log('eventSource.onopen', e);
@@ -76,10 +77,25 @@
 		const data = await getApiFunction('makeUmap');
 	};
 
+	const runAll = async () => {
+		const data = await getApiFunction('run');
+	};
+
+	const makeZip = async () => {
+		const data = await getApiFunction('makeZip');
+		const zipUrl = `${protocoll}://${domain}:8000/${instance.id}/project.zip`;
+		var a = document.createElement('a');
+		a.href = zipUrl;
+		a.setAttribute('download', 'project.zip');
+		a.click();
+	};
+
 	const getApiFunction = async (func) => {
+		loading = true;
 		const response = await api('GET', `instances/${instance.id}/${func}`);
 		const data = await response.json();
 		console.log(data);
+		loading = false;
 		return data;
 	};
 
@@ -198,40 +214,53 @@
 	{/if}
 </div>
 
-<div class="flex flex-row space-x-4  shadow-xl rounded-xl p-8 bg-white dark:bg-slate-800 mt-7">
-	<button
-		on:click={crawlCollection}
-		class="py-2 px-3 w-40 bg-cyan-500 text-white text-sm font-semibold rounded-md shadow-lg hover:shadow-cyan-500/50 focus:outline-none"
-		>Crawl Collection</button
-	>
-	<button
-		on:click={crawlImages}
-		class="py-2 px-3 w-40 bg-cyan-500 text-white text-sm font-semibold rounded-md shadow-lg hover:shadow-cyan-500/50 focus:outline-none"
-		>Crawl Images</button
-	>
-	<button
-		on:click={makeSpritesheets}
-		class="py-2 px-3 w-40 bg-cyan-500 text-white text-sm font-semibold rounded-md shadow-lg hover:shadow-cyan-500/50 focus:outline-none"
-		>Make Spritesheets</button
-	>
-	<button
-		on:click={makeMetadata}
-		class="py-2 px-3 w-40 bg-cyan-500 text-white text-sm font-semibold rounded-md shadow-lg hover:shadow-cyan-500/50 focus:outline-none"
-		>Make Metadata</button
-	>
-	<button
-		on:click={makeFeatures}
-		class="py-2 px-3 w-40 bg-cyan-500 text-white text-sm font-semibold rounded-md shadow-lg hover:shadow-cyan-500/50 focus:outline-none"
-		>Make Features</button
-	>
-	<button
-		on:click={makeUmap}
-		class="py-2 px-3 w-40 bg-cyan-500 text-white text-sm font-semibold rounded-md shadow-lg hover:shadow-cyan-500/50 focus:outline-none"
-		>Make Umap</button
-	>
-	<button
-		on:click={deleteIntance}
-		class="py-2 px-3 w-32 bg-red-500 text-white text-sm font-semibold rounded-md shadow-lg hover:shadow-red-500/50 focus:outline-none"
-		>Delete</button
-	>
+<div class="disabled:opacity-75  shadow-xl rounded-xl p-8 bg-white dark:bg-slate-800 mt-7">
+	<div class="grid gap-4 grid-cols-4 {loading && 'grayscale pointer-events-none'} ">
+		<button
+			on:click={crawlCollection}
+			class="py-2 px-3 w-40 bg-cyan-500 text-white text-sm font-semibold rounded-md shadow-lg hover:shadow-cyan-500/50 focus:outline-none"
+		>
+			Crawl Collection</button
+		>
+		<button
+			on:click={crawlImages}
+			class="py-2 px-3 w-40 bg-cyan-500 text-white text-sm font-semibold rounded-md shadow-lg hover:shadow-cyan-500/50 focus:outline-none"
+			>Crawl Images</button
+		>
+		<button
+			on:click={makeSpritesheets}
+			class="py-2 px-3 w-40 bg-cyan-500 text-white text-sm font-semibold rounded-md shadow-lg hover:shadow-cyan-500/50 focus:outline-none"
+			>Make Spritesheets</button
+		>
+		<button
+			on:click={makeMetadata}
+			class="py-2 px-3 w-40 bg-cyan-500 text-white text-sm font-semibold rounded-md shadow-lg hover:shadow-cyan-500/50 focus:outline-none"
+			>Make Metadata</button
+		>
+		<button
+			on:click={makeFeatures}
+			class="py-2 px-3 w-40 bg-cyan-500 text-white text-sm font-semibold rounded-md shadow-lg hover:shadow-cyan-500/50 focus:outline-none"
+			>Make Features</button
+		>
+		<button
+			on:click={makeUmap}
+			class="py-2 px-3 w-40 bg-cyan-500 text-white text-sm font-semibold rounded-md shadow-lg hover:shadow-cyan-500/50 focus:outline-none"
+			>Make Umap</button
+		>
+		<button
+			on:click={runAll}
+			class="py-2 px-3 w-40 bg-cyan-500 text-white text-sm font-semibold rounded-md shadow-lg hover:shadow-cyan-500/50 focus:outline-none"
+			>Run All</button
+		>
+		<button
+			on:click={makeZip}
+			class="py-2 px-3 w-40 bg-cyan-500 text-white text-sm font-semibold rounded-md shadow-lg hover:shadow-cyan-500/50 focus:outline-none"
+			>Download Zip</button
+		>
+		<button
+			on:click={deleteIntance}
+			class="py-2 px-3 w-32 bg-red-500 text-white text-sm font-semibold rounded-md shadow-lg hover:shadow-red-500/50 focus:outline-none"
+			>Delete</button
+		>
+	</div>
 </div>
