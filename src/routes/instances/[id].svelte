@@ -106,67 +106,58 @@
 	</h1>
 </div>
 
-<div class="flex shadow-xl rounded-xl p-8 bg-white flex-col mt-7">
-	<!-- <p class="text-sm w-max text-gray-700 dark:text-white font-semibold border-b border-gray-200">
+<div class="flex shadow-xl rounded-xl p-8 bg-white dark:bg-slate-800 flex-col mt-7">
+	<!-- <p class="text-sm w-max text-gray-700 dark:text-slate-400 font-semibold border-b border-gray-200">
 		{instance.iiif_url}
 	</p> -->
 	<!-- <div class="flex items-end space-x-2 my-6">
-		<p class="text-5xl text-black dark:text-white font-bold">
+		<p class="text-5xl text-black dark:text-slate-400 font-bold">
 			{instance.id}
 		</p>
 	</div> -->
-	<div class="dark:text-white">
-		<div
-			class="flex items-center pb-2 mb-2 text-sm space-x-12 md:space-x-24 justify-between border-b border-gray-200"
-		>
-			<p>Manifest URL</p>
-			<div class="flex items-end text-xs">{instance.iiif_url}</div>
+	<div
+		class="flex items-center pb-2 mb-2 text-sm space-x-12 md:space-x-24 justify-between border-b border-gray-200 dark:border-slate-600"
+	>
+		<p>Manifest URL</p>
+		<div class="flex items-end text-xs">{instance.iiif_url}</div>
+	</div>
+
+	<div
+		class="flex items-center pb-2 mb-2 text-sm space-x-12 md:space-x-24 justify-between border-b border-gray-200 dark:border-slate-600"
+	>
+		<p>Id</p>
+		<div class="flex items-end text-xs">{instance.id}</div>
+	</div>
+	<div
+		class="flex items-center pb-2 mb-2 text-sm space-x-12 md:space-x-24 justify-between border-b border-gray-200 dark:border-slate-600"
+	>
+		<p>Created</p>
+		<div class="flex items-end text-xs">{new Date(instance.created * 1000)}</div>
+	</div>
+	<div
+		class="flex items-center pb-2 mb-2 text-sm space-x-12 md:space-x-24 justify-between border-b border-gray-200 dark:border-slate-600"
+	>
+		<p>Status</p>
+		<div class="flex items-end text-xs">
+			<span
+				class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800 dark:border-slate-600"
+			>
+				{instance.status}
+			</span>
 		</div>
 	</div>
-	<div class="dark:text-white">
-		<div
-			class="flex items-center pb-2 mb-2 text-sm space-x-12 md:space-x-24 justify-between border-b border-gray-200"
-		>
-			<p>Id</p>
-			<div class="flex items-end text-xs">{instance.id}</div>
-		</div>
-	</div>
-	<div class="dark:text-white">
-		<div
-			class="flex items-center pb-2 mb-2 text-sm space-x-12 md:space-x-24 justify-between border-b border-gray-200"
-		>
-			<p>Created</p>
-			<div class="flex items-end text-xs">{new Date(instance.created * 1000)}</div>
-		</div>
-	</div>
-	<div class="dark:text-white">
-		<div
-			class="flex items-center pb-2 mb-2 text-sm space-x-12 md:space-x-24 justify-between border-b border-gray-200"
-		>
-			<p>Status</p>
-			<div class="flex items-end text-xs">
-				<span
-					class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800"
-				>
-					{instance.status}
-				</span>
-			</div>
-		</div>
-	</div>
-	<div class="dark:text-white">
-		<div
-			class="flex items-center pb-2 mb-2 text-sm space-x-12 md:space-x-24 justify-between border-b border-gray-200"
-		>
-			<p>Socket</p>
-			<div class="flex items-end text-xs">
-				<span
-					class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full {connected
-						? 'bg-green-100'
-						: 'bg-red-100'} text-{connected ? 'green-800' : 'red-800'}"
-				>
-					{connected ? 'Connected' : 'Disconnected'}
-				</span>
-			</div>
+	<div
+		class="flex items-center pb-2 mb-2 text-sm space-x-12 md:space-x-24 justify-between border-b border-gray-200 dark:border-slate-600"
+	>
+		<p>Socket</p>
+		<div class="flex items-end text-xs">
+			<span
+				class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full {connected
+					? 'bg-green-100'
+					: 'bg-red-100'} text-{connected ? 'green-800' : 'red-800'}"
+			>
+				{connected ? 'Connected' : 'Disconnected'}
+			</span>
 		</div>
 	</div>
 	{#if progress}
@@ -195,7 +186,7 @@
 	{/if}
 </div>
 
-<div class="flex flex-row space-x-4  shadow-xl rounded-xl p-8 bg-white  mt-7">
+<div class="flex flex-row space-x-4  shadow-xl rounded-xl p-8 bg-white dark:bg-slate-800 mt-7">
 	<button
 		on:click={crawlCollection}
 		class="py-2 px-3 w-40 bg-cyan-500 text-white text-sm font-semibold rounded-md shadow-lg hover:shadow-cyan-500/50 focus:outline-none"

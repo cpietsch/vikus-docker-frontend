@@ -24,7 +24,7 @@
 		Paste a IIIF V3 collection URL here and we will parse it and create a new instance for you.
 	</p>
 	<!-- <form class="new" action="/instances" method="post"> -->
-	<figure class="flex shadow-xl rounded-xl p-8 bg-white">
+	<figure class="flex shadow-xl rounded-xl p-8 bg-white dark:bg-slate-800">
 		<input
 			type="url"
 			name="url"
@@ -32,7 +32,7 @@
 			class="rounded-lg flex-auto p-2 mr-1 border-2 border-gray-300"
 			placeholder="https://iiif.wellcomecollection.org/presentation/collections/genres/Stickers"
 			required
-			value={url}
+			bind:value={url}
 		/>
 
 		<button
