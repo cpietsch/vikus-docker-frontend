@@ -1,14 +1,30 @@
 <script context="module">
 	import { api } from '$lib/api';
+	const testInstance = {
+		id: 'test',
+		label: 'Test Instance',
+		iiif_url: 'http://localhost:5000/instances/test',
+		status: 'ok'
+	};
 	export async function load({ params, fetch, session, stuff }) {
-		const response = await api('get', `instances/${params.id}`);
+		try {
+			const response = await api('get', `instances/${params.id}`);
 
-		return {
-			status: response.status,
-			props: {
-				instance: response.ok && (await response.json())
-			}
-		};
+			return {
+				status: response.status,
+				props: {
+					instance: response.ok && (await response.json())
+				}
+			};
+		} catch (error) {
+			return {
+				status: error.status,
+				props: {
+					error: error.message,
+					instance: testInstance
+				}
+			};
+		}
 	}
 </script>
 
@@ -20,10 +36,15 @@
 	import { goto } from '$app/navigation';
 	import { get } from 'svelte/store';
 
-	let events = [];
+	import CollectionForm from '$lib/form/CollectionForm.svelte';
+	import ImageForm from '$lib/form/ImageForm.svelte';
+	import UmapForm from '$lib/form/UmapForm.svelte';
+
 	let connected = false;
-	let progress = null;
 	let loading = false;
+
+	let collectionProgress = null;
+	let imageProgress = null;
 
 	// const eventSource = new EventSource(`${protocoll}://${domain}/instances/${instance.id}/events`);
 	const eventSource = new WebSocket(`ws://${domain}:${port}/instances/${instance.id}/ws`);
@@ -39,8 +60,11 @@
 	eventSource.onmessage = (event) => {
 		const data = JSON.parse(event.data);
 
-		if (data.task && data.task.startsWith('crawling')) {
-			progress = data;
+		if (data.task && data.task === 'crawlCollection') {
+			collectionProgress = data;
+		}
+		if (data.task && data.task === 'crawlImages') {
+			imageProgress = data;
 		}
 	};
 
@@ -52,10 +76,6 @@
 
 	$: console.log(instance);
 	// $: console.log(socketEvents);
-
-	const crawlCollection = async () => {
-		const data = await getApiFunction('crawlCollection');
-	};
 
 	const crawlImages = async () => {
 		const data = await getApiFunction('crawlImages');
@@ -71,10 +91,6 @@
 
 	const makeFeatures = async () => {
 		const data = await getApiFunction('makeFeatures');
-	};
-
-	const makeUmap = async () => {
-		const data = await getApiFunction('makeUmap');
 	};
 
 	const runAll = async () => {
@@ -150,30 +166,7 @@
 		<p>Created</p>
 		<div class="flex items-end text-xs">{new Date(instance.created * 1000)}</div>
 	</div>
-	<!-- <div
-		class="flex items-center pb-2 mb-2 text-sm space-x-12 md:space-x-24 justify-between border-b border-gray-200 dark:border-slate-600"
-	>
-		<p>Status</p>
-		<div class="flex items-end text-xs">
-			<span
-				class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800 dark:border-slate-600"
-			>
-				{instance.status}
-			</span>
-		</div>
-	</div> -->
-	<div
-		class="flex items-center pb-2 mb-2 text-sm space-x-12 md:space-x-24 justify-between border-b border-gray-200 dark:border-slate-600"
-	>
-		<p>Manifests</p>
-		<div class="flex items-end text-xs">{instance.manifests}</div>
-	</div>
-	<div
-		class="flex items-center pb-2 mb-2 text-sm space-x-12 md:space-x-24 justify-between border-b border-gray-200 dark:border-slate-600"
-	>
-		<p>Images</p>
-		<div class="flex items-end text-xs">{instance.images}</div>
-	</div>
+
 	<div
 		class="flex items-center pb-2 mb-2 text-sm space-x-12 md:space-x-24 justify-between border-b border-gray-200 dark:border-slate-600"
 	>
@@ -188,45 +181,10 @@
 			</span>
 		</div>
 	</div>
-	{#if progress}
-		<div class="relative mt-8">
-			<div class="flex mb-2 items-center justify-between">
-				<div>
-					<span
-						class="text-xs font-semibold inline-block py-1 px-2 uppercase rounded-full text-green-600 bg-green-200"
-					>
-						{progress.task}
-					</span>
-				</div>
-				<div class="text-right">
-					<span class="text-xs font-semibold inline-block text-green-600">
-						Queue: {progress.queue}, Completed {progress.completed}
-					</span>
-				</div>
-			</div>
-			<div class="overflow-hidden h-2 mb-4 text-xs flex rounded bg-green-200">
-				<div
-					style="width: {parseInt(progress.progress * 100)}%"
-					class="shadow-none flex flex-col text-center whitespace-nowrap text-white justify-center bg-green-500"
-				/>
-			</div>
-		</div>
-	{/if}
 </div>
 
 <div class="disabled:opacity-75  shadow-xl rounded-xl p-8 bg-white dark:bg-slate-800 mt-7">
 	<div class="grid gap-4 grid-cols-4 {loading && 'grayscale pointer-events-none'} ">
-		<button
-			on:click={crawlCollection}
-			class="py-2 px-3 w-40 bg-cyan-500 text-white text-sm font-semibold rounded-md shadow-lg hover:shadow-cyan-500/50 focus:outline-none"
-		>
-			Crawl Collection</button
-		>
-		<button
-			on:click={crawlImages}
-			class="py-2 px-3 w-40 bg-cyan-500 text-white text-sm font-semibold rounded-md shadow-lg hover:shadow-cyan-500/50 focus:outline-none"
-			>Crawl Images</button
-		>
 		<button
 			on:click={makeSpritesheets}
 			class="py-2 px-3 w-40 bg-cyan-500 text-white text-sm font-semibold rounded-md shadow-lg hover:shadow-cyan-500/50 focus:outline-none"
@@ -242,11 +200,7 @@
 			class="py-2 px-3 w-40 bg-cyan-500 text-white text-sm font-semibold rounded-md shadow-lg hover:shadow-cyan-500/50 focus:outline-none"
 			>Make Features</button
 		>
-		<button
-			on:click={makeUmap}
-			class="py-2 px-3 w-40 bg-cyan-500 text-white text-sm font-semibold rounded-md shadow-lg hover:shadow-cyan-500/50 focus:outline-none"
-			>Make Umap</button
-		>
+
 		<button
 			on:click={runAll}
 			class="py-2 px-3 w-40 bg-cyan-500 text-white text-sm font-semibold rounded-md shadow-lg hover:shadow-cyan-500/50 focus:outline-none"
@@ -264,3 +218,7 @@
 		>
 	</div>
 </div>
+
+<CollectionForm progress={collectionProgress} />
+<ImageForm progress={imageProgress} />
+<UmapForm />
