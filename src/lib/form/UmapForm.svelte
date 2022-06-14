@@ -1,13 +1,16 @@
 <script>
 	import { api } from '$lib/api';
 
+	export let instance;
+
 	let neighbours = 15;
 	let minDistance = 0.2;
 	let loading = false;
 
 	const makeUmap = async () => {
 		loading = true;
-		const response = await api('GET', `instances/${instance.id}/makeUmap`, {
+		const response = await api('POST', `instances/makeUmap`, null, {
+			instance_id: instance.id,
 			n_neighbors: neighbours,
 			min_distance: minDistance
 		});

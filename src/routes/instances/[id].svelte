@@ -60,6 +60,10 @@
 	eventSource.onmessage = (event) => {
 		const data = JSON.parse(event.data);
 
+		if (data.type != 'ping') {
+			console.log(data);
+		}
+
 		if (data.task && data.task === 'crawlCollection') {
 			collectionProgress = data;
 		}
@@ -219,6 +223,6 @@
 	</div>
 </div>
 
-<CollectionForm progress={collectionProgress} />
-<ImageForm progress={imageProgress} />
-<UmapForm />
+<CollectionForm progress={collectionProgress} {instance} />
+<ImageForm progress={imageProgress} {instance} />
+<UmapForm {instance} />

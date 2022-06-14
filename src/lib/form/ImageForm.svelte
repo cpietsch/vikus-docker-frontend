@@ -1,15 +1,17 @@
 <script>
 	import { api } from '$lib/api';
 
+	export let instance;
+	export let progress = { queue: 0, progress: 0, completed: 0, size: 0 };
 	let worker = 4;
 	let count = 0;
 
-	let progress = { queue: 0, progress: 0, completed: 0, size: 0 };
 	let loading = false;
 
 	const crawl = async () => {
 		loading = true;
-		const response = await api('GET', `instances/${instance.id}/crawlImages`, {
+		const response = await api('POST', `instances/crawlImages`, null, {
+			instance_id: instance.id,
 			worker
 		});
 		const data = await response.json();
@@ -51,7 +53,7 @@
 					<span
 						class="text-xs font-semibold inline-block py-1 px-2 uppercase rounded-full text-green-600 bg-green-200"
 					>
-						{progress.completed}/{progress.queue}
+						{progress.completed}/{progress.size}
 					</span>
 					<!-- <span
 					class="text-xs font-semibold inline-block py-1 px-2 uppercase rounded-full text-green-600 bg-green-200"
@@ -61,7 +63,7 @@
 				</div>
 				<div class="text-right">
 					<span class="text-xs font-semibold inline-block text-green-600">
-						{progress.progress}%
+						{parseInt(progress.progress * 100)}%
 					</span>
 				</div>
 			</div>
