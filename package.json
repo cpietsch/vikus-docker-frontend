@@ -4,6 +4,7 @@
   "scripts": {
     "dev": "svelte-kit dev",
     "build": "rm -rf build && svelte-kit build && touch build/.nojekyll",
+    "deploy": "npm run build && gh-pages -d build",
     "package": "svelte-kit package",
     "preview": "svelte-kit preview",
     "prepare": "svelte-kit sync",
@@ -28,7 +29,7 @@
   "dependencies": {
     "@fontsource/fira-mono": "^4.5.8",
     "@lukeed/uuid": "^2.0.0",
-    "d3": "^7.4.4",
-    "cookie": "^0.4.1"
+    "cookie": "^0.4.1",
+    "d3": "^7.4.4"
   }
 }
