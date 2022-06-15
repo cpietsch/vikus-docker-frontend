@@ -1,0 +1,145 @@
+{
+  ".svelte-kit/runtime/client/start.js": {
+    "file": "start-b0e1434d.js",
+    "src": ".svelte-kit/runtime/client/start.js",
+    "isEntry": true,
+    "imports": [
+      "_index-ce9f2381.js",
+      "_index-8f6252c4.js",
+      "_singletons-d1fb5791.js"
+    ],
+    "dynamicImports": [
+      "src/routes/__layout.svelte",
+      ".svelte-kit/runtime/components/error.svelte",
+      "src/routes/index.svelte",
+      "src/routes/instances/[id].svelte",
+      "src/routes/instances/index.svelte",
+      "src/routes/new.svelte",
+      "src/routes/ui.svelte"
+    ]
+  },
+  "src/routes/__layout.svelte": {
+    "file": "pages/__layout.svelte-3cbc4803.js",
+    "src": "src/routes/__layout.svelte",
+    "isEntry": true,
+    "isDynamicEntry": true,
+    "imports": [
+      "_index-ce9f2381.js"
+    ],
+    "css": [
+      "assets/pages/__layout.svelte-dd6685a2.css"
+    ],
+    "assets": [
+      "assets/fira-mono-cyrillic-ext-400-normal-3df7909e.woff2",
+      "assets/fira-mono-all-400-normal-1e3b098c.woff",
+      "assets/fira-mono-cyrillic-400-normal-c7d433fd.woff2",
+      "assets/fira-mono-greek-ext-400-normal-9e2fe623.woff2",
+      "assets/fira-mono-greek-400-normal-a8be01ce.woff2",
+      "assets/fira-mono-latin-ext-400-normal-6bfabd30.woff2",
+      "assets/fira-mono-latin-400-normal-e43b3538.woff2"
+    ]
+  },
+  ".svelte-kit/runtime/components/error.svelte": {
+    "file": "error.svelte-d98ffac5.js",
+    "src": ".svelte-kit/runtime/components/error.svelte",
+    "isEntry": true,
+    "isDynamicEntry": true,
+    "imports": [
+      "_index-ce9f2381.js"
+    ]
+  },
+  "src/routes/index.svelte": {
+    "file": "pages/index.svelte-66b880fe.js",
+    "src": "src/routes/index.svelte",
+    "isEntry": true,
+    "isDynamicEntry": true,
+    "imports": [
+      "_index-ce9f2381.js",
+      "_NewInstanceForm-e9550143.js",
+      "_index-8f6252c4.js",
+      "_api-1d4496df.js",
+      "_navigation-0e6511d1.js",
+      "_singletons-d1fb5791.js"
+    ],
+    "css": [
+      "assets/pages/index.svelte-6dd5d1b1.css"
+    ]
+  },
+  "src/routes/instances/[id].svelte": {
+    "file": "pages/instances/_id_.svelte-cf37e21f.js",
+    "src": "src/routes/instances/[id].svelte",
+    "isEntry": true,
+    "isDynamicEntry": true,
+    "imports": [
+      "_index-ce9f2381.js",
+      "_api-1d4496df.js",
+      "_navigation-0e6511d1.js",
+      "_singletons-d1fb5791.js"
+    ]
+  },
+  "src/routes/instances/index.svelte": {
+    "file": "pages/instances/index.svelte-7ec9a3b2.js",
+    "src": "src/routes/instances/index.svelte",
+    "isEntry": true,
+    "isDynamicEntry": true,
+    "imports": [
+      "_index-ce9f2381.js",
+      "_navigation-0e6511d1.js",
+      "_singletons-d1fb5791.js"
+    ]
+  },
+  "src/routes/new.svelte": {
+    "file": "pages/new.svelte-8c352ee8.js",
+    "src": "src/routes/new.svelte",
+    "isEntry": true,
+    "isDynamicEntry": true,
+    "imports": [
+      "_index-ce9f2381.js",
+      "_NewInstanceForm-e9550143.js",
+      "_api-1d4496df.js",
+      "_navigation-0e6511d1.js",
+      "_singletons-d1fb5791.js"
+    ]
+  },
+  "src/routes/ui.svelte": {
+    "file": "pages/ui.svelte-f44ea540.js",
+    "src": "src/routes/ui.svelte",
+    "isEntry": true,
+    "isDynamicEntry": true,
+    "imports": [
+      "_index-ce9f2381.js"
+    ],
+    "css": [
+      "assets/pages/ui.svelte-2f12cf0a.css"
+    ]
+  },
+  "_index-ce9f2381.js": {
+    "file": "chunks/index-ce9f2381.js"
+  },
+  "_index-8f6252c4.js": {
+    "file": "chunks/index-8f6252c4.js",
+    "imports": [
+      "_index-ce9f2381.js"
+    ]
+  },
+  "_singletons-d1fb5791.js": {
+    "file": "chunks/singletons-d1fb5791.js"
+  },
+  "_NewInstanceForm-e9550143.js": {
+    "file": "chunks/NewInstanceForm-e9550143.js",
+    "imports": [
+      "_index-ce9f2381.js",
+      "_api-1d4496df.js",
+      "_navigation-0e6511d1.js"
+    ]
+  },
+  "_api-1d4496df.js": {
+    "file": "chunks/api-1d4496df.js"
+  },
+  "_navigation-0e6511d1.js": {
+    "file": "chunks/navigation-0e6511d1.js",
+    "imports": [
+      "_singletons-d1fb5791.js"
+    ]
+  }
+}
