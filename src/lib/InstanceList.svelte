@@ -14,8 +14,8 @@
 	}
 </script> -->
 <script>
-	export let instances = [];
 	import { base } from '$app/paths';
+	export let instances = [];
 
 	function toReadableTime(time) {
 		const date = new Date(time * 1000);

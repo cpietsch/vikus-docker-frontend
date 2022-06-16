@@ -34,7 +34,6 @@
 	import { onDestroy } from 'svelte';
 	import { domain, protocoll, port, portWeb } from '$lib/api';
 	import { goto } from '$app/navigation';
-	import { get } from 'svelte/store';
 	import { base } from '$app/paths';
 
 	import CollectionForm from '$lib/form/CollectionForm.svelte';
