@@ -32,7 +32,7 @@
 	export let instance;
 
 	import { onDestroy } from 'svelte';
-	import { domain, protocoll, port } from '$lib/api';
+	import { domain, protocoll, port, portWeb } from '$lib/api';
 	import { goto } from '$app/navigation';
 	import { get } from 'svelte/store';
 
@@ -88,7 +88,7 @@
 
 	const makeZip = async () => {
 		const data = await getApiFunction('makeZip');
-		const zipUrl = `${protocoll}://${domain}:8000/data/${instance.id}/project.zip`;
+		const zipUrl = `${protocoll}://${domain}:${portWeb}/data/${instance.id}/project.zip`;
 		var a = document.createElement('a');
 		a.href = zipUrl;
 		a.setAttribute('download', 'project.zip');
@@ -130,14 +130,6 @@
 </div>
 
 <div class="flex shadow-xl rounded-xl p-8 bg-white dark:bg-slate-800 flex-col mt-7">
-	<!-- <p class="text-sm w-max text-gray-700 dark:text-slate-400 font-semibold border-b border-gray-200">
-		{instance.iiif_url}
-	</p> -->
-	<!-- <div class="flex items-end space-x-2 my-6">
-		<p class="text-5xl text-black dark:text-slate-400 font-bold">
-			{instance.id}
-		</p>
-	</div> -->
 	<div
 		class="flex items-center pb-2 mb-2 text-sm space-x-12 md:space-x-24 justify-between border-b border-gray-200 dark:border-slate-600"
 	>
@@ -170,6 +162,19 @@
 			>
 				{connected ? 'Connected' : 'Disconnected'}
 			</span>
+		</div>
+	</div>
+	<div
+		class="flex items-center pb-2 mb-2 text-sm space-x-12 md:space-x-24 justify-between border-b border-gray-200 dark:border-slate-600"
+	>
+		<p>Vikus Viewer</p>
+		<div class="flex items-end text-xs">
+			<a
+				target="_blank"
+				class="font-semibold rounded-full px-2 bg-blue-100"
+				href="{protocoll}://{domain}:{portWeb}/viewer/?config=../data/{instance.id}/config.json"
+				>Open</a
+			>
 		</div>
 	</div>
 </div>
