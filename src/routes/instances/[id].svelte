@@ -39,6 +39,8 @@
 	import CollectionForm from '$lib/form/CollectionForm.svelte';
 	import ImageForm from '$lib/form/ImageForm.svelte';
 	import UmapForm from '$lib/form/UmapForm.svelte';
+	import FeatureForm from '$lib/form/FeatureForm.svelte';
+	import SpritesheetForm from '$lib/form/SpritesheetForm.svelte';
 
 	let connected = false;
 	let loading = false;
@@ -79,23 +81,6 @@
 	});
 
 	$: console.log(instance);
-	// $: console.log(socketEvents);
-
-	const crawlImages = async () => {
-		const data = await getApiFunction('crawlImages');
-	};
-
-	const makeSpritesheets = async () => {
-		const data = await getApiFunction('makeSpritesheets');
-	};
-
-	const makeMetadata = async () => {
-		const data = await getApiFunction('makeMetadata');
-	};
-
-	const makeFeatures = async () => {
-		const data = await getApiFunction('makeFeatures');
-	};
 
 	const runAll = async () => {
 		const data = await getApiFunction('run');
@@ -103,7 +88,7 @@
 
 	const makeZip = async () => {
 		const data = await getApiFunction('makeZip');
-		const zipUrl = `${protocoll}://${domain}:8000/${instance.id}/project.zip`;
+		const zipUrl = `${protocoll}://${domain}:8000/data/${instance.id}/project.zip`;
 		var a = document.createElement('a');
 		a.href = zipUrl;
 		a.setAttribute('download', 'project.zip');
@@ -112,7 +97,9 @@
 
 	const getApiFunction = async (func) => {
 		loading = true;
-		const response = await api('GET', `instances/${instance.id}/${func}`);
+		const response = await api('POST', `instances/${func}`, null, {
+			instance_id: instance.id
+		});
 		const data = await response.json();
 		console.log(data);
 		loading = false;
@@ -190,22 +177,6 @@
 <div class="disabled:opacity-75  shadow-xl rounded-xl p-8 bg-white dark:bg-slate-800 mt-7">
 	<div class="grid gap-4 grid-cols-4 {loading && 'grayscale pointer-events-none'} ">
 		<button
-			on:click={makeSpritesheets}
-			class="py-2 px-3 w-40 bg-cyan-500 text-white text-sm font-semibold rounded-md shadow-lg hover:shadow-cyan-500/50 focus:outline-none"
-			>Make Spritesheets</button
-		>
-		<button
-			on:click={makeMetadata}
-			class="py-2 px-3 w-40 bg-cyan-500 text-white text-sm font-semibold rounded-md shadow-lg hover:shadow-cyan-500/50 focus:outline-none"
-			>Make Metadata</button
-		>
-		<button
-			on:click={makeFeatures}
-			class="py-2 px-3 w-40 bg-cyan-500 text-white text-sm font-semibold rounded-md shadow-lg hover:shadow-cyan-500/50 focus:outline-none"
-			>Make Features</button
-		>
-
-		<button
 			on:click={runAll}
 			class="py-2 px-3 w-40 bg-cyan-500 text-white text-sm font-semibold rounded-md shadow-lg hover:shadow-cyan-500/50 focus:outline-none"
 			>Run All</button
@@ -214,6 +185,11 @@
 			on:click={makeZip}
 			class="py-2 px-3 w-40 bg-cyan-500 text-white text-sm font-semibold rounded-md shadow-lg hover:shadow-cyan-500/50 focus:outline-none"
 			>Download Zip</button
+		>
+		<button
+			on:click={() => getApiFunction('makeMetadata')}
+			class="py-2 px-3 w-40 bg-cyan-500 text-white text-sm font-semibold rounded-md shadow-lg hover:shadow-cyan-500/50 focus:outline-none"
+			>Make Metadata</button
 		>
 		<button
 			on:click={deleteIntance}
@@ -225,4 +201,6 @@
 
 <CollectionForm progress={collectionProgress} {instance} />
 <ImageForm progress={imageProgress} {instance} />
+<SpritesheetForm {instance} />
+<FeatureForm {instance} />
 <UmapForm {instance} />

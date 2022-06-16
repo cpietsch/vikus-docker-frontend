@@ -3,16 +3,14 @@
 
 	export let instance;
 
-	let neighbours = 15;
-	let minDistance = 0.2;
+	let batchSize = 64;
 	let loading = false;
 
-	const makeUmap = async () => {
+	const run = async () => {
 		loading = true;
-		const response = await api('POST', `instances/makeUmap`, null, {
+		const response = await api('POST', `instances/makeFeatures`, null, {
 			instance_id: instance.id,
-			n_neighbors: neighbours,
-			min_distance: minDistance
+			batchSize
 		});
 		const data = await response.json();
 		console.log(data);
@@ -24,40 +22,25 @@
 	class="flex shadow-xl rounded-xl p-8 bg-white dark:bg-slate-800 flex-col mt-4  {loading &&
 		'grayscale pointer-events-none'} "
 >
-	<h1 class="mb-4">UMAP</h1>
+	<h1 class="mb-4">Feature Extraction</h1>
 	<label
 		class="flex items-center pb-2 mb-2 text-sm space-x-12 md:space-x-24 justify-between border-b border-gray-200 dark:border-slate-600"
 	>
-		<span class="w-32">Neighbours</span>
+		<span class="w-32">batchSize</span>
 		<input
 			type="number"
 			min="1"
-			max="200"
-			name="neighbours"
-			id="neighbours"
+			max="1024"
+			name="batchSize"
+			id="batchSize"
 			class="rounded-lg flex-auto p-2 mr-1 border-2 border-gray-300"
 			required
-			bind:value={neighbours}
+			bind:value={batchSize}
 		/>
 	</label>
 
-	<label
-		class="flex items-center pb-2 mb-2 text-sm space-x-12 md:space-x-24 justify-between border-b border-gray-200 dark:border-slate-600"
-	>
-		<span class="w-32">Min Distance</span>
-		<input
-			type="number"
-			min="0"
-			max="1"
-			name="neighbours"
-			id="neighbours"
-			class="rounded-lg flex-auto p-2 mr-1 border-2 border-gray-300"
-			required
-			bind:value={minDistance}
-		/>
-	</label>
 	<button
-		on:click={makeUmap}
+		on:click={run}
 		class="py-2 px-3 w-40 self-end bg-cyan-500 text-white text-sm font-semibold rounded-md shadow-lg hover:shadow-cyan-500/50 focus:outline-none"
 		>Run</button
 	>

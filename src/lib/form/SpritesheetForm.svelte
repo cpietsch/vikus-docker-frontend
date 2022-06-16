@@ -1,13 +1,14 @@
 <script>
 	import { api } from '$lib/api';
 
+	export let instance;
 	let spriteSize = 128;
 	let loading = false;
 
-	const makeUmap = async () => {
+	const run = async () => {
 		loading = true;
-		const response = await api('GET', `instances/${instance.id}/makeSpritesheets`, {
-			spriteSize
+		const response = await api('POST', `instances/makeSpritesheets`, null, {
+			instance_id: instance.id
 		});
 		const data = await response.json();
 		console.log(data);
@@ -15,45 +16,30 @@
 	};
 </script>
 
-<h1 class="mt-6">UMAP</h1>
 <div
 	class="flex shadow-xl rounded-xl p-8 bg-white dark:bg-slate-800 flex-col mt-4  {loading &&
 		'grayscale pointer-events-none'} "
 >
+	<h1 class="mb-6">Spritesheets</h1>
 	<label
-		class="flex items-center pb-2 mb-2 text-sm space-x-12 md:space-x-24 justify-between border-b border-gray-200 dark:border-slate-600"
+		class="grayscale pointer-events-none flex items-center pb-2 mb-2 text-sm space-x-12 md:space-x-24 justify-between border-b border-gray-200 dark:border-slate-600"
 	>
-		<span class="w-32">Neighbours</span>
+		<span class="w-32">spriteSize</span>
 		<input
 			type="number"
 			min="1"
-			max="200"
-			name="neighbours"
-			id="neighbours"
+			max="512"
+			name="spriteSize"
+			id="spriteSize"
 			class="rounded-lg flex-auto p-2 mr-1 border-2 border-gray-300"
 			required
-			bind:value={neighbours}
+			bind:value={spriteSize}
 		/>
 	</label>
 
-	<label
-		class="flex items-center pb-2 mb-2 text-sm space-x-12 md:space-x-24 justify-between border-b border-gray-200 dark:border-slate-600"
-	>
-		<span class="w-32">Min Distance</span>
-		<input
-			type="number"
-			min="0"
-			max="1"
-			name="neighbours"
-			id="neighbours"
-			class="rounded-lg flex-auto p-2 mr-1 border-2 border-gray-300"
-			required
-			bind:value={minDistance}
-		/>
-	</label>
 	<button
-		on:click={makeUmap}
-		class="py-2 px-3 w-40 bg-cyan-500 text-white text-sm font-semibold rounded-md shadow-lg hover:shadow-cyan-500/50 focus:outline-none"
-		>Run Umap</button
+		on:click={run}
+		class="py-2 px-3 w-40 self-end bg-cyan-500 text-white text-sm font-semibold rounded-md shadow-lg hover:shadow-cyan-500/50 focus:outline-none"
+		>Run</button
 	>
 </div>

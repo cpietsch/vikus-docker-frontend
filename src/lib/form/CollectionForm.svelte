@@ -22,12 +22,11 @@
 	};
 </script>
 
-<h1 class="mt-6">Collection</h1>
 <div
 	class="flex shadow-xl rounded-xl p-8 bg-white dark:bg-slate-800 flex-col mt-4  {loading &&
 		'grayscale pointer-events-none'} "
 >
-	<!-- svelte-ignore a11y-label-has-associated-control -->
+	<h1 class="mb-6">Collection</h1>
 	<label
 		class="flex items-center pb-2 mb-2 text-sm space-x-12 md:space-x-24 justify-between border-b border-gray-200 dark:border-slate-600"
 	>
@@ -91,7 +90,7 @@
 	{/if}
 	<button
 		on:click={crawl}
-		class="py-2 px-3 w-40 bg-cyan-500 text-white text-sm font-semibold rounded-md shadow-lg hover:shadow-cyan-500/50 focus:outline-none"
-		>Crawl Collection</button
+		class="py-2 px-3 w-40 self-end bg-cyan-500 text-white text-sm font-semibold rounded-md shadow-lg hover:shadow-cyan-500/50 focus:outline-none"
+		>Run</button
 	>
 </div>
