@@ -7,11 +7,13 @@ const dev = process.env.NODE_ENV === "development";
 const config = {
 	preprocess: preprocess(),
 	kit: {
-		// prerender: { default: true, entries: [], enabled: false },
+		prerender: { default: false, entries: [] },
 		methodOverride: {
 			allowed: ['PUT', 'PATCH', 'DELETE']
 		},
-		adapter: adapter(),
+		adapter: adapter({
+			fallback: 'index.html',
+		}),
 		paths: {
 			base: dev ? "" : "/frontend",
 		},
