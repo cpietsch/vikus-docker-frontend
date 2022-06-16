@@ -1,5 +1,7 @@
 <script>
 	import { page } from '$app/stores';
+	import { base } from '$app/paths';
+	import { api, domain, port, protocoll } from '$lib/api';
 </script>
 
 <header>
@@ -11,12 +13,12 @@
 				class="py-4 border-b border-slate-900/10 lg:px-8 lg:border-0 dark:border-slate-300/10 mx-4 lg:mx-0"
 			>
 				<div class="relative flex items-center">
-					<a class="mr-3 flex-none font-bold overflow-hidden md:w-auto" href="/"
+					<a class="mr-3 flex-none font-bold overflow-hidden md:w-auto" href={base}
 						>VIKUS IIIF DOCKER</a
 					>
 					<a
 						class="ml-3 text-xs leading-5 font-medium text-sky-600 dark:text-sky-400 bg-sky-400/10 rounded-full py-1 px-3 hidden xl:flex md:flex items-center hover:bg-sky-400/20"
-						href="/new"
+						href="{base}/new"
 						><span class="ml-2"
 							>Create a VIKUS instance including similarity layouts of any IIIF collection</span
 						><svg
@@ -38,10 +40,14 @@
 						<nav class="text-sm leading-6 font-semibold text-slate-700 dark:text-slate-200">
 							<ul class="flex space-x-8">
 								<li>
-									<a class="hover:text-sky-500 dark:hover:text-sky-400" href="/docs">Docs</a>
+									<a
+										class="hover:text-sky-500 dark:hover:text-sky-400"
+										href="{protocoll}://{domain}:{port}/docs">Docs</a
+									>
 								</li>
 								<li>
-									<a href="/about" class="hover:text-sky-500 dark:hover:text-sky-400">About</a>
+									<a href="{base}/about" class="hover:text-sky-500 dark:hover:text-sky-400">About</a
+									>
 								</li>
 							</ul>
 						</nav>

@@ -1,8 +1,8 @@
 <script context="module">
+	import { api, domain, port } from '$lib/api';
 	export async function load({ params, fetch, session, stuff }) {
-		const url = `http://${location.hostname}:5000/instances`;
 		try {
-			const response = await fetch(url);
+			const response = await api('GET', `instances`);
 			return {
 				//status: response.status,
 				props: {
@@ -22,6 +22,7 @@
 	// import InstanceList from 'src/routes/instances/index.svelte';
 
 	export let instances = [];
+	import { base } from '$app/paths';
 </script>
 
 <Header />
@@ -36,7 +37,7 @@
 					<div class="h-10 " />
 					<div class="relative flex text-center pointer-events-auto">
 						<a
-							href="/new"
+							href="{base}/new"
 							class="w-full py-2 px-3 bg-cyan-500 text-white text-sm font-semibold rounded-md shadow-lg hover:shadow-cyan-500/50 focus:outline-none"
 							>New Instance</a
 						>
