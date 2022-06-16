@@ -1,1 +1,0 @@
-const i="http",a=location.hostname,p=5e3;function $(s,c,t,o){const e=o?`?${Object.keys(o).map(n=>`${n}=${o[n]}`).join("&")}`:"";return fetch(`${i}://${a}:${p}/${c}${e}`,{method:s,headers:{"content-type":"application/json"},body:t&&JSON.stringify(t)})}export{$ as a,i as b,a as d,p};
