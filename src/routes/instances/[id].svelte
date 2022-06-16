@@ -35,6 +35,7 @@
 	import { domain, protocoll, port, portWeb } from '$lib/api';
 	import { goto } from '$app/navigation';
 	import { get } from 'svelte/store';
+	import { base } from '$app/paths';
 
 	import CollectionForm from '$lib/form/CollectionForm.svelte';
 	import ImageForm from '$lib/form/ImageForm.svelte';
@@ -113,7 +114,7 @@
 		const data = await response.json();
 		// console.log(data);
 		if (response.ok) {
-			goto('/');
+			goto(base);
 		}
 	};
 </script>
