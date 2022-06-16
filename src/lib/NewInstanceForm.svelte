@@ -1,6 +1,7 @@
 <script>
 	import { api } from '$lib/api';
 	import { goto } from '$app/navigation';
+	import { base } from '$app/paths';
 
 	let url = 'https://iiif.wellcomecollection.org/presentation/collections/genres/Stickers';
 
@@ -11,7 +12,7 @@
 		const json = await response.json();
 
 		if (response.ok) {
-			goto(`/instances/${json.id}`);
+			goto(`${base}/instances/${json.id}`);
 		}
 	};
 </script>
