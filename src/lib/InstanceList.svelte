@@ -15,6 +15,7 @@
 </script> -->
 <script>
 	export let instances = [];
+	import { base } from '$app/paths';
 
 	function toReadableTime(time) {
 		const date = new Date(time * 1000);
@@ -27,7 +28,7 @@
 	<ul class="flex flex-col w-full">
 		{#each instances as instance (instance.id)}
 			<li class="flex flex-row mb-2">
-				<a href={`/instances/${instance.id}`} class="w-full">
+				<a href={`${base}/instances/${instance.id}`} class="w-full">
 					<div
 						class="shadow border-gray-400 dark:border-slate-600 cursor-pointer bg-white dark:bg-gray-800 rounded-md flex flex-1 items-center p-4"
 					>
