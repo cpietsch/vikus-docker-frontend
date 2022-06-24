@@ -59,6 +59,10 @@
 		console.log('eventSource.onerror', e);
 		connected = false;
 	};
+	eventSource.onclose = (e) => {
+		console.log('eventSource.onclose', e);
+		connected = false;
+	};
 	eventSource.onmessage = (event) => {
 		const data = JSON.parse(event.data);
 
@@ -73,11 +77,17 @@
 			imageProgress = data;
 		}
 	};
+	const reconnectTimer = setInterval(() => {
+		if (connected) {
+			return;
+		}
+		eventSource.close();
+		eventSource.open(`ws://${domain}:${port}/instances/${instance.id}/ws`);
+	}, 1000);
 
 	onDestroy(() => {
 		console.log("It's destroyed");
 		eventSource.close();
-		// socket.close();
 	});
 
 	$: console.log(instance);
