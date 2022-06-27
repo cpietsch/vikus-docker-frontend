@@ -1,0 +1,1 @@
+const c="http",e=location.hostname,r=5e3,i=8e3;function p(n,s,t,o){const a=o?`?${new URLSearchParams(o).toString()}`:"";return fetch(`${c}://${e}:${r}${s}${a}`,{method:n,headers:{"content-type":"application/json"},body:t&&JSON.stringify(t)})}export{r as a,p as b,i as c,e as d,c as p};
