@@ -8,7 +8,7 @@
 	const onSubmit = async (e) => {
 		e.preventDefault();
 
-		const response = await api('POST', `instances?url=${url}`);
+		const response = await api('POST', `/instances?url=${url}`);
 		const json = await response.json();
 
 		if (response.ok) {

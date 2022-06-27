@@ -1,0 +1,73 @@
+<script>
+	import { api } from '$lib/api';
+
+	export let instance;
+	export let path;
+
+	let loading = false;
+
+	const onSubmit = async (e) => {
+		loading = true;
+		const formData = new FormData(e.target);
+		const fields = {};
+		for (let field of formData) {
+			const [key, value] = field;
+			fields[key] = value;
+		}
+		const response = await api(path.method, path.path, null, fields);
+		const data = await response.json();
+		console.log(data);
+		loading = false;
+	};
+
+	const value = (params) => {
+		if (params.name === 'instance_id') {
+			return instance.id;
+		}
+		return params.schema.default;
+	};
+
+	const type = (params) => {
+		const type = params.schema.type;
+		if (type === 'number' || type === 'integer') {
+			return 'number';
+		}
+		if (type === 'boolean') {
+			return 'checkbox';
+		}
+		return 'text';
+	};
+</script>
+
+<div
+	class="flex shadow-xl rounded-xl p-8 bg-white dark:bg-slate-800 flex-col mt-4  {loading &&
+		'grayscale pointer-events-none'} "
+>
+	<h1 class="mb-2">{path.name}</h1>
+	<p class="text-sm mb-4">{path.description}</p>
+	<form on:submit|preventDefault={onSubmit}>
+		{#each path.parameters as params}
+			<label
+				class="flex items-center pb-2 mb-2 text-sm space-x-12 md:space-x-24 justify-between border-b border-gray-200 dark:border-slate-600"
+				class:hidden={params.name === 'instance_id'}
+				for={params.name}
+			>
+				<span class="flex-auto">{params.description}</span>
+				<input
+					name={params.name}
+					id={params.name}
+					class="rounded-lg  p-2 mr-1 border-2 border-gray-300"
+					type={type(params)}
+					value={value(params)}
+					step="any"
+				/>
+			</label>
+		{/each}
+
+		<button
+			type="submit"
+			class="py-2 px-3 w-40 self-end bg-cyan-500 text-white text-sm font-semibold rounded-md shadow-lg hover:shadow-cyan-500/50 focus:outline-none"
+			>Run</button
+		>
+	</form>
+</div>

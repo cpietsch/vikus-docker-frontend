@@ -8,7 +8,7 @@
 	};
 	export async function load({ params, fetch, session, stuff }) {
 		try {
-			const response = await api('get', `instances/${params.id}`);
+			const response = await api('get', `/instances/${params.id}`);
 
 			return {
 				status: response.status,
@@ -33,71 +33,73 @@
 
 	import { onDestroy } from 'svelte';
 	import { domain, protocoll, port, portWeb } from '$lib/api';
+	import { apiPaths } from '$lib/store';
 	import { goto } from '$app/navigation';
 	import { base } from '$app/paths';
 
-	import CollectionForm from '$lib/form/CollectionForm.svelte';
-	import ImageForm from '$lib/form/ImageForm.svelte';
-	import UmapForm from '$lib/form/UmapForm.svelte';
-	import FeatureForm from '$lib/form/FeatureForm.svelte';
-	import SpritesheetForm from '$lib/form/SpritesheetForm.svelte';
+	import Form from '$lib/form/Form.svelte';
 
 	let connected = false;
 	let loading = false;
 
-	let collectionProgress = null;
-	let imageProgress = null;
+	let progress;
 
 	// const eventSource = new EventSource(`${protocoll}://${domain}/instances/${instance.id}/events`);
-	const eventSource = new WebSocket(`ws://${domain}:${port}/instances/${instance.id}/ws`);
+	let webSocket = new WebSocket(`ws://${domain}:${port}/instances/${instance.id}/ws`);
 
-	eventSource.onopen = (e) => {
+	webSocket.onopen = (e) => {
 		console.log('eventSource.onopen', e);
 		connected = true;
 	};
-	eventSource.onerror = (e) => {
+	webSocket.onerror = (e) => {
 		console.log('eventSource.onerror', e);
 		connected = false;
 	};
-	eventSource.onclose = (e) => {
+	webSocket.onclose = (e) => {
 		console.log('eventSource.onclose', e);
 		connected = false;
 	};
-	eventSource.onmessage = (event) => {
+	webSocket.onmessage = (event) => {
 		const data = JSON.parse(event.data);
 
 		if (data.type != 'ping') {
 			console.log(data);
 		}
 
-		if (data.task && data.task === 'crawlCollection') {
-			collectionProgress = data;
-		}
-		if (data.task && data.task === 'crawlImages') {
-			imageProgress = data;
+		if (data.task) {
+			progress = data;
 		}
 	};
 	const reconnectTimer = setInterval(() => {
 		if (connected) {
 			return;
 		}
-		eventSource.close();
-		eventSource.open(`ws://${domain}:${port}/instances/${instance.id}/ws`);
+		webSocket = new WebSocket(`ws://${domain}:${port}/instances/${instance.id}/ws`);
 	}, 1000);
 
 	onDestroy(() => {
 		console.log("It's destroyed");
-		eventSource.close();
+		connected = false;
+		webSocket.close();
+		clearInterval(reconnectTimer);
 	});
 
-	$: console.log(instance);
+	$: console.log($apiPaths);
 
 	const runAll = async () => {
-		const data = await getApiFunction('run');
+		const response = await api('POST', `/instances/generate`, null, {
+			instance_id: instance.id
+		});
+		const data = await response.json();
+		console.log(data);
+		loading = false;
 	};
 
 	const makeZip = async () => {
-		const data = await getApiFunction('makeZip');
+		const response = await api('POST', `/instances/steps/zip`, null, {
+			instance_id: instance.id
+		});
+		const data = await response.json();
 		const zipUrl = `${protocoll}://${domain}:${portWeb}/data/${instance.id}/project.zip`;
 		var a = document.createElement('a');
 		a.href = zipUrl;
@@ -105,30 +107,24 @@
 		a.click();
 	};
 
-	const getApiFunction = async (func) => {
-		loading = true;
-		const response = await api('POST', `instances/${func}`, null, {
-			instance_id: instance.id
-		});
-		const data = await response.json();
-		console.log(data);
-		loading = false;
-		return data;
-	};
-
 	const deleteIntance = async () => {
-		eventSource.close();
-
-		const response = await api('DELETE', `instances/${instance.id}`);
+		webSocket.close();
+		const response = await api('DELETE', `/instances/${instance.id}`);
 		const data = await response.json();
-		// console.log(data);
-		if (response.ok) {
+		if (data.status == 'deleted') {
 			goto(base);
 		}
 	};
 </script>
 
 <div class="relative ">
+	<div class="absolute top-0 right-0 bg-gray-100">
+		<button
+			on:click={deleteIntance}
+			class="p-1 pl-2 pr-2 bg-red-700 text-white text-sm font-semibold rounded-md shadow-lg hover:shadow-red-500/50 focus:outline-none"
+			>Delete</button
+		>
+	</div>
 	<h1>
 		{instance.label}
 		<span
@@ -187,35 +183,51 @@
 			>
 		</div>
 	</div>
-</div>
 
-<div class="disabled:opacity-75  shadow-xl rounded-xl p-8 bg-white dark:bg-slate-800 mt-7">
-	<div class="grid gap-4 grid-cols-4 {loading && 'grayscale pointer-events-none'} ">
+	<div class="flex justify-between mt-8 {loading && 'grayscale pointer-events-none'} ">
 		<button
 			on:click={runAll}
 			class="py-2 px-3 w-40 bg-cyan-500 text-white text-sm font-semibold rounded-md shadow-lg hover:shadow-cyan-500/50 focus:outline-none"
-			>Run All</button
+			>Generate Instance</button
 		>
 		<button
 			on:click={makeZip}
 			class="py-2 px-3 w-40 bg-cyan-500 text-white text-sm font-semibold rounded-md shadow-lg hover:shadow-cyan-500/50 focus:outline-none"
-			>Download Zip</button
-		>
-		<button
-			on:click={() => getApiFunction('makeMetadata')}
-			class="py-2 px-3 w-40 bg-cyan-500 text-white text-sm font-semibold rounded-md shadow-lg hover:shadow-cyan-500/50 focus:outline-none"
-			>Make Metadata</button
-		>
-		<button
-			on:click={deleteIntance}
-			class="py-2 px-3 w-32 bg-red-500 text-white text-sm font-semibold rounded-md shadow-lg hover:shadow-red-500/50 focus:outline-none"
-			>Delete</button
+			>Download ZIP</button
 		>
 	</div>
 </div>
 
-<CollectionForm progress={collectionProgress} {instance} />
-<ImageForm progress={imageProgress} {instance} />
-<SpritesheetForm {instance} />
-<FeatureForm {instance} />
-<UmapForm {instance} />
+{#if progress}
+	<div class="relative mt-2">
+		<div class="flex mb-2 items-center justify-between">
+			<div>
+				<span
+					class="text-xs font-semibold inline-block py-1 px-2 uppercase rounded-full text-green-600 bg-green-200"
+				>
+					{progress.completed}/{progress.size}
+				</span>
+				<!-- <span
+					class="text-xs font-semibold inline-block py-1 px-2 uppercase rounded-full text-green-600 bg-green-200"
+				>
+					Completed {completed}
+				</span> -->
+			</div>
+			<div class="text-right">
+				<span class="text-xs font-semibold inline-block text-green-600">
+					{parseInt(progress.progress * 100)}%
+				</span>
+			</div>
+		</div>
+		<div class="overflow-hidden h-2 mb-4 text-xs flex rounded bg-green-200">
+			<div
+				style="width: {parseInt(progress.progress * 100)}%"
+				class="shadow-none flex flex-col text-center whitespace-nowrap text-white justify-center bg-green-500"
+			/>
+		</div>
+	</div>
+{/if}
+
+{#each $apiPaths as path}
+	<Form {instance} {path} />
+{/each}

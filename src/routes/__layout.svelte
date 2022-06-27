@@ -2,7 +2,7 @@
 	import { api, domain, port } from '$lib/api';
 	export async function load({ params, fetch, session, stuff }) {
 		try {
-			const response = await api('GET', `instances`);
+			const response = await api('GET', `/instances`);
 			return {
 				//status: response.status,
 				props: {
@@ -37,7 +37,7 @@
 					<div class="h-10 " />
 					<div class="relative flex text-center pointer-events-auto">
 						<a
-							href="{base}/new"
+							href="{base}/"
 							class="w-full py-2 px-3 bg-cyan-500 text-white text-sm font-semibold rounded-md shadow-lg hover:shadow-cyan-500/50 focus:outline-none"
 							>New Instance</a
 						>
