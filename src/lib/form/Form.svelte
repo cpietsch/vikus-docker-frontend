@@ -1,5 +1,6 @@
 <script>
 	import { api } from '$lib/api';
+	import Button from '$lib/form/Button.svelte';
 
 	export let instance;
 	export let path;
@@ -39,10 +40,7 @@
 	};
 </script>
 
-<div
-	class="flex shadow-xl rounded-xl p-8 bg-white dark:bg-slate-800 flex-col mt-4  {loading &&
-		'grayscale pointer-events-none'} "
->
+<div class="flex shadow-xl rounded-xl p-8 bg-white dark:bg-slate-800 flex-col mt-4 ">
 	<h1 class="mb-2">{path.name}</h1>
 	<p class="text-sm mb-4">{path.description}</p>
 	<form on:submit|preventDefault={onSubmit}>
@@ -53,21 +51,28 @@
 				for={params.name}
 			>
 				<span class="flex-auto">{params.description}</span>
-				<input
-					name={params.name}
-					id={params.name}
-					class="rounded-lg  p-2 mr-1 border-2 border-gray-300"
-					type={type(params)}
-					value={value(params)}
-					step="any"
-				/>
+				{#if params.schema.type === 'boolean'}
+					<input type="hidden" name={params.name} id={params.name} value="false" />
+					<input
+						type="checkbox"
+						name={params.name}
+						id={params.name}
+						class="rounded-lg  p-2 mr-1 border-2 border-gray-300"
+						value="true"
+					/>
+				{:else}
+					<input
+						name={params.name}
+						id={params.name}
+						class="rounded-lg  p-2 mr-1 border-2 border-gray-300"
+						type={type(params)}
+						value={value(params)}
+						step="any"
+					/>
+				{/if}
 			</label>
 		{/each}
 
-		<button
-			type="submit"
-			class="py-2 px-3 w-40 self-end bg-cyan-500 text-white text-sm font-semibold rounded-md shadow-lg hover:shadow-cyan-500/50 focus:outline-none"
-			>Run</button
-		>
+		<Button {loading}>Run</Button>
 	</form>
 </div>

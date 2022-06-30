@@ -38,6 +38,7 @@
 	import { base } from '$app/paths';
 
 	import Form from '$lib/form/Form.svelte';
+	import Button from '$lib/form/Button.svelte';
 
 	let connected = false;
 	let loading = false;
@@ -87,6 +88,7 @@
 	$: console.log($apiPaths);
 
 	const runAll = async () => {
+		loading = true;
 		const response = await api('POST', `/instances/generate`, null, {
 			instance_id: instance.id
 		});
@@ -96,6 +98,7 @@
 	};
 
 	const makeZip = async () => {
+		loading = true;
 		const response = await api('POST', `/instances/steps/zip`, null, {
 			instance_id: instance.id
 		});
@@ -184,17 +187,9 @@
 		</div>
 	</div>
 
-	<div class="flex justify-between mt-8 {loading && 'grayscale pointer-events-none'} ">
-		<button
-			on:click={runAll}
-			class="py-2 px-3 w-40 bg-cyan-500 text-white text-sm font-semibold rounded-md shadow-lg hover:shadow-cyan-500/50 focus:outline-none"
-			>Generate Instance</button
-		>
-		<button
-			on:click={makeZip}
-			class="py-2 px-3 w-40 bg-cyan-500 text-white text-sm font-semibold rounded-md shadow-lg hover:shadow-cyan-500/50 focus:outline-none"
-			>Download ZIP</button
-		>
+	<div class="flex justify-between mt-8">
+		<Button {loading} on:click={runAll}>Generate Instance</Button>
+		<Button {loading} on:click={makeZip}>Download ZIP</Button>
 	</div>
 </div>
 
