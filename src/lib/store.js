@@ -2,6 +2,7 @@ import { writable } from "svelte/store";
 import { api } from "./api";
 
 export const apiPaths = writable();
+export const parameters = writable();
 
 async function loadApi() {
   const response = await api('GET', '/openapi.json');

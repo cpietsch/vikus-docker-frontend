@@ -1,9 +1,12 @@
 <script>
 	import { api } from '$lib/api';
 	import Button from '$lib/form/Button.svelte';
+	import { parameters } from '$lib/store';
 
 	export let instance;
 	export let path;
+
+	console.log(path);
 
 	let loading = false;
 

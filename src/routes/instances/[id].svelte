@@ -121,7 +121,7 @@
 </script>
 
 <div class="relative ">
-	<div class="absolute top-0 right-0 bg-gray-100">
+	<div class="absolute top-0 right-0">
 		<button
 			on:click={deleteIntance}
 			class="p-1 pl-2 pr-2 bg-red-700 text-white text-sm font-semibold rounded-md shadow-lg hover:shadow-red-500/50 focus:outline-none"
@@ -193,20 +193,20 @@
 	</div>
 </div>
 
-{#if progress}
-	<div class="relative mt-2">
+<div class="sticky top-0 flex shadow-xl rounded-xl p-8 bg-white dark:bg-slate-800 flex-col mt-3">
+	{#if progress}
 		<div class="flex mb-2 items-center justify-between">
 			<div>
 				<span
 					class="text-xs font-semibold inline-block py-1 px-2 uppercase rounded-full text-green-600 bg-green-200"
 				>
-					{progress.completed}/{progress.size}
+					{progress.task}
 				</span>
-				<!-- <span
+				<span
 					class="text-xs font-semibold inline-block py-1 px-2 uppercase rounded-full text-green-600 bg-green-200"
 				>
-					Completed {completed}
-				</span> -->
+					{progress.completed}/{progress.size}
+				</span>
 			</div>
 			<div class="text-right">
 				<span class="text-xs font-semibold inline-block text-green-600">
@@ -220,8 +220,8 @@
 				class="shadow-none flex flex-col text-center whitespace-nowrap text-white justify-center bg-green-500"
 			/>
 		</div>
-	</div>
-{/if}
+	{/if}
+</div>
 
 {#each $apiPaths as path}
 	<Form {instance} {path} />

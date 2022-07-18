@@ -24,7 +24,7 @@
 	}
 </script>
 
-<div class="container flex flex-col mx-auto w-full items-center justify-center mt-5">
+<div class="container flex flex-col mx-auto w-full items-center justify-center mt-1">
 	<ul class="flex flex-col w-full">
 		{#each instances as instance (instance.id)}
 			<li class="flex flex-row mb-2">

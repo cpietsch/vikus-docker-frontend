@@ -27,14 +27,14 @@
 
 <Header />
 
-<div class="overflow-hidden">
+<div class="">
 	<div class="max-w-8xl mx-auto px-4 sm:px-6 md:px-8">
 		<div
 			class="hidden lg:block fixed left-0 z-20 inset-0 top-[3.8125rem] right-auto w-[19.5rem] pb-10 px-8 overflow-y-auto"
 		>
 			<nav id="nav" class="lg:text-sm lg:leading-6 relative">
 				<div class="sticky top-0 -ml-0.5 pointer-events-none">
-					<div class="h-10 " />
+					<div class="h-4 bg-slate-100 dark:bg-slate-900" />
 					<div class="relative flex text-center pointer-events-auto">
 						<a
 							href="{base}/"
@@ -42,10 +42,9 @@
 							>New Instance</a
 						>
 					</div>
+					<div class="h-8 bg-gradient-to-b from-white dark:from-slate-900" />
 				</div>
-				<div class="h-8 bg-gradient-to-b from-white dark:from-slate-900">
-					<InstanceList {instances} />
-				</div>
+				<InstanceList {instances} />
 			</nav>
 		</div>
 		<div class="lg:pl-[19.5rem]">
