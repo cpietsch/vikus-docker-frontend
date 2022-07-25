@@ -43,7 +43,7 @@
 	let connected = false;
 	let loading = false;
 
-	let progress;
+	let progress = false;
 
 	// const eventSource = new EventSource(`${protocoll}://${domain}/instances/${instance.id}/events`);
 	let webSocket = new WebSocket(`ws://${domain}:${port}/instances/${instance.id}/ws`);
@@ -72,6 +72,7 @@
 		}
 	};
 	const reconnectTimer = setInterval(() => {
+		console.log('timer');
 		if (connected) {
 			return;
 		}
@@ -86,6 +87,10 @@
 	});
 
 	$: console.log($apiPaths);
+	$: {
+		console.log(instance);
+		progress = false;
+	}
 
 	const runAll = async () => {
 		loading = true;
@@ -193,7 +198,7 @@
 	</div>
 </div>
 
-<div class="sticky top-0 flex shadow-xl rounded-xl p-8 bg-white dark:bg-slate-800 flex-col mt-3">
+<div class="sticky top-20 flex shadow-xl rounded-xl p-8 bg-white dark:bg-slate-800 flex-col mt-3">
 	{#if progress}
 		<div class="flex mb-2 items-center justify-between">
 			<div>
