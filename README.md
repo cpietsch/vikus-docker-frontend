@@ -1,6 +1,14 @@
 # vikus-docker-frontend
 VIKUS Docker instance builder FRONTEND
 
+This is a simple frontend for the vikus-docker. It is used to create a new VIKUS Viewer instance.
+Right now the frontend is only used to create a new VIKUS Viewer instance from an IIIF collection V3.
+
+## How to use the frontend
+1. Input a IIIF collection V3 URL in the input field
+2. Click the "Create" button
+3. Now you can change the settings of the VIKUS Viewer instance or just use the default settings by clicking the "Generate Instance" button
+
 ## WORK IN PROGRESS
 This is a preview of the VIKUS Viewer Docker instance builder
 https://github.com/cpietsch/vikus-docker

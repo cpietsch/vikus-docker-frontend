@@ -46,38 +46,45 @@
 	let progress = false;
 
 	// const eventSource = new EventSource(`${protocoll}://${domain}/instances/${instance.id}/events`);
-	let webSocket = new WebSocket(`ws://${domain}:${port}/instances/${instance.id}/ws`);
+	let webSocket = null;
 
-	webSocket.onopen = (e) => {
-		console.log('eventSource.onopen', e);
-		connected = true;
-	};
-	webSocket.onerror = (e) => {
-		console.log('eventSource.onerror', e);
-		connected = false;
-	};
-	webSocket.onclose = (e) => {
-		console.log('eventSource.onclose', e);
-		connected = false;
-	};
-	webSocket.onmessage = (event) => {
-		const data = JSON.parse(event.data);
-
-		if (data.type != 'ping') {
-			console.log(data);
+	function connectWebsocket() {
+		console.log('connection to websocket');
+		if (webSocket) {
+			webSocket.close();
 		}
+		webSocket = new WebSocket(`ws://${domain}:${port}/instances/${instance.id}/ws`);
+		webSocket.onopen = (e) => {
+			console.log('eventSource.onopen', e);
+			connected = true;
+		};
+		webSocket.onerror = (e) => {
+			console.log('eventSource.onerror', e);
+			connected = false;
+		};
+		webSocket.onclose = (e) => {
+			console.log('eventSource.onclose', e);
+			connected = false;
+		};
+		webSocket.onmessage = (event) => {
+			const data = JSON.parse(event.data);
 
-		if (data.task) {
-			progress = data;
-		}
-	};
+			if (data.type != 'ping') {
+				console.log(data);
+			}
+
+			if (data.task) {
+				progress = data;
+			}
+		};
+	}
+
 	const reconnectTimer = setInterval(() => {
-		console.log('timer');
 		if (connected) {
 			return;
 		}
-		webSocket = new WebSocket(`ws://${domain}:${port}/instances/${instance.id}/ws`);
-	}, 1000);
+		connectWebsocket();
+	}, 2000);
 
 	onDestroy(() => {
 		console.log("It's destroyed");
@@ -86,10 +93,12 @@
 		clearInterval(reconnectTimer);
 	});
 
-	$: console.log($apiPaths);
+	// $: console.log($apiPaths);
 	$: {
 		console.log(instance);
 		progress = false;
+		connected = false;
+		connectWebsocket();
 	}
 
 	const runAll = async () => {
