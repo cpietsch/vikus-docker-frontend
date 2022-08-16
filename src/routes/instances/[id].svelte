@@ -2,7 +2,7 @@
 	import { api } from '$lib/api';
 	const testInstance = {
 		id: 'test',
-		label: 'Test Instance',
+		label: 'Disconnected Instance',
 		iiif_url: 'http://localhost:5000/instances/test',
 		status: 'ok'
 	};
@@ -33,7 +33,7 @@
 
 	import { onDestroy } from 'svelte';
 	import { domain, protocoll, port, portWeb } from '$lib/api';
-	import { apiPaths } from '$lib/store';
+	import { apiPaths, loadInstances } from '$lib/store';
 	import { goto } from '$app/navigation';
 	import { base } from '$app/paths';
 
@@ -42,7 +42,6 @@
 
 	let connected = false;
 	let loading = false;
-
 	let progress = false;
 
 	// const eventSource = new EventSource(`${protocoll}://${domain}/instances/${instance.id}/events`);
@@ -129,9 +128,12 @@
 		const response = await api('DELETE', `/instances/${instance.id}`);
 		const data = await response.json();
 		if (data.status == 'deleted') {
-			goto(base);
+			loadInstances();
+			goto(base ? base : '/');
 		}
 	};
+
+	console.log('base', base);
 </script>
 
 <div class="relative ">

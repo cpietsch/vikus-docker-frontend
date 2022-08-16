@@ -1,27 +1,8 @@
-<script context="module">
-	import { api, domain, port } from '$lib/api';
-	export async function load({ params, fetch, session, stuff }) {
-		try {
-			const response = await api('GET', `/instances`);
-			return {
-				//status: response.status,
-				props: {
-					instances: response.ok && (await response.json())
-				}
-			};
-		} catch (error) {}
-		return {};
-	}
-</script>
-
 <script>
 	import '../app.css';
 
 	import Header from '$lib/Header.svelte';
 	import InstanceList from '$lib/InstanceList.svelte';
-	// import InstanceList from 'src/routes/instances/index.svelte';
-
-	export let instances = [];
 	import { base } from '$app/paths';
 </script>
 
@@ -44,7 +25,7 @@
 					</div>
 					<div class="h-8 bg-gradient-to-b from-white dark:from-slate-900" />
 				</div>
-				<InstanceList {instances} />
+				<InstanceList />
 			</nav>
 		</div>
 		<div class="lg:pl-[19.5rem]">

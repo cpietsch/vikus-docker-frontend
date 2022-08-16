@@ -23,3 +23,12 @@ async function loadApi() {
   apiPaths.set(paths);
 }
 loadApi();
+
+export const instanceList = writable([]);
+export async function loadInstances() {
+  const response = await api('GET', '/instances');
+  const instances = await response.json();
+  console.log('instances', instances);
+  instanceList.set(instances);
+}
+loadInstances();
