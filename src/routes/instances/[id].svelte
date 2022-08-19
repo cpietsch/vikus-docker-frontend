@@ -39,10 +39,20 @@
 
 	import Form from '$lib/form/Form.svelte';
 	import Button from '$lib/form/Button.svelte';
+	import { each } from 'svelte/internal';
 
 	let connected = false;
-	let loading = false;
+	let loading = { all: false, zip: false };
 	let progress = false;
+	let statusList = [
+		'collection',
+		'images',
+		'features',
+		'similarity',
+		'metadata',
+		'spritesheets',
+		'zip'
+	];
 
 	// const eventSource = new EventSource(`${protocoll}://${domain}/instances/${instance.id}/events`);
 	let webSocket = null;
@@ -101,17 +111,17 @@
 	}
 
 	const runAll = async () => {
-		loading = true;
+		loading = { all: true, zip: false };
 		const response = await api('POST', `/instances/generate`, null, {
 			instance_id: instance.id
 		});
 		const data = await response.json();
 		console.log(data);
-		loading = false;
+		loading = { all: false, zip: false };
 	};
 
 	const makeZip = async () => {
-		loading = true;
+		loading = { all: false, zip: true };
 		const response = await api('POST', `/instances/steps/zip`, null, {
 			instance_id: instance.id
 		});
@@ -121,6 +131,7 @@
 		a.href = zipUrl;
 		a.setAttribute('download', 'project.zip');
 		a.click();
+		loading = { all: false, zip: false };
 	};
 
 	const deleteIntance = async () => {
@@ -146,15 +157,10 @@
 	</div>
 	<h1>
 		{instance.label}
-		<span
-			class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800"
-		>
-			{instance.status}
-		</span>
 	</h1>
 </div>
 
-<div class="flex shadow-xl rounded-xl p-8 bg-white dark:bg-slate-800 flex-col mt-7">
+<div class="flex shadow-xl rounded-xl p-8 bg-white dark:bg-slate-800 flex-col mt-7 mb-4">
 	<div
 		class="flex items-center pb-2 mb-2 text-sm space-x-12 md:space-x-24 justify-between border-b border-gray-200 dark:border-slate-600"
 	>
@@ -202,15 +208,44 @@
 			>
 		</div>
 	</div>
+	<div
+		class="flex items-center pb-2 mb-2 text-sm space-x-12 md:space-x-24 justify-between border-b border-gray-200 dark:border-slate-600"
+	>
+		<p>Data Dir</p>
+		<div class="flex items-end text-xs">
+			<a
+				target="_blank"
+				class="font-semibold rounded-full px-2 bg-blue-100"
+				href="{protocoll}://{domain}:{portWeb}/data/{instance.id}">Open</a
+			>
+		</div>
+	</div>
+	<div
+		class="flex items-center pb-2 mb-2 text-sm space-x-12 md:space-x-24 justify-between border-b border-gray-200 dark:border-slate-600"
+	>
+		<p>Status</p>
+		<div class="flex items-end text-xs">
+			{#each statusList as status}
+				<span
+					class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full {instance[status]
+						? 'bg-green-100'
+						: 'bg-red-100'} text-{instance[status] ? 'green-800' : 'red-800'}"
+				>
+					{status}
+				</span>
+			{/each}
+		</div>
+	</div>
 
 	<div class="flex justify-between mt-8">
-		<Button {loading} on:click={runAll}>Generate Instance</Button>
-		<Button {loading} on:click={makeZip}>Download ZIP</Button>
+		<Button loading={loading.all} on:click={runAll}>Generate Instance</Button>
+		<Button loading={loading.zip} on:click={makeZip}>Download ZIP</Button>
 	</div>
 </div>
-
-<div class="sticky top-20 flex shadow-xl rounded-xl p-8 bg-white dark:bg-slate-800 flex-col mt-3">
-	{#if progress}
+{#if progress}
+	<div
+		class="sticky top-0 flex shadow-xl rounded-xl p-4 bg-slate-100 dark:bg-slate-800 flex-col mt-3"
+	>
 		<div class="flex mb-2 items-center justify-between">
 			<div>
 				<span
@@ -230,14 +265,16 @@
 				</span>
 			</div>
 		</div>
-		<div class="overflow-hidden h-2 mb-4 text-xs flex rounded bg-green-200">
+		<div class="overflow-hidden h-2 mb-2 text-xs flex rounded bg-green-200">
 			<div
 				style="width: {parseInt(progress.progress * 100)}%"
 				class="shadow-none flex flex-col text-center whitespace-nowrap text-white justify-center bg-green-500"
 			/>
 		</div>
-	{/if}
-</div>
+	</div>
+{/if}
+
+<h2 class="mt-8 mb-6">Advanced Settings</h2>
 
 {#each $apiPaths as path}
 	<Form {instance} {path} />
