@@ -39,17 +39,21 @@
 							<li>
 								<a
 									class="hover:text-sky-500 dark:hover:text-sky-400"
-									href="{protocoll}://{domain}:{port}/docs">Docs</a
+									href="{protocoll}://{domain}:{port}/docs">API</a
 								>
 							</li>
-							<li>
-								<a href="{base}/about" class="hover:text-sky-500 dark:hover:text-sky-400">About</a>
-							</li>
+							<!-- <li>
+								<a
+									href="{base}/about"
+									target="_blank"
+									class="hover:text-sky-500 dark:hover:text-sky-400">About</a
+								>
+							</li> -->
 						</ul>
 					</nav>
 					<div class="flex items-center border-l border-slate-200 ml-6 pl-6 dark:border-slate-800">
 						<a
-							href="https://github.com/cpietsch/vikus"
+							href="https://github.com/cpietsch/vikus-docker"
 							target="_blank"
 							class="ml-2 block text-slate-400 hover:text-slate-500 dark:hover:text-slate-300"
 							><span class="sr-only">VIKUS IIIF Docker on GitHub</span><svg

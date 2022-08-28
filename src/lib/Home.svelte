@@ -4,10 +4,25 @@
 	import { base } from '$app/paths';
 
 	let url = 'https://iiif.wellcomecollection.org/presentation/collections/genres/Stickers';
+	let error = null;
 
 	const onSubmit = async (e) => {
 		e.preventDefault();
+		let isValid = false;
 
+		try {
+			const test = await fetch(url);
+			const data = await test.json();
+			//isValid = data['@context']?.endsWith('iiif/presentation/3/context.json');
+			isValid = data['type'] === 'Collection';
+		} catch (e) {
+			isValid = false;
+		}
+
+		if (!isValid) {
+			error = true;
+			return;
+		}
 		const response = await api('POST', `/instances?url=${url}`);
 		const json = await response.json();
 
@@ -33,6 +48,7 @@
 			class="rounded-lg flex-auto p-2 mr-1 border-2 border-gray-300"
 			placeholder="https://iiif.wellcomecollection.org/presentation/collections/genres/Stickers"
 			required
+			on:change={(e) => (error = null)}
 			bind:value={url}
 		/>
 
@@ -44,4 +60,10 @@
 		>
 	</figure>
 	<!-- </form> -->
+	{#if error}
+		<div class="mt-4 p-4 bg-red-100 text-red-500 rounded-md">
+			<p class="font-semibold">Error</p>
+			<p>That doesn't look like a IIIF V3 collection URL.</p>
+		</div>
+	{/if}
 </div>
