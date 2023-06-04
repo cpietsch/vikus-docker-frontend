@@ -2,6 +2,9 @@
 	import { api } from '$lib/api';
 	import Button from '$lib/form/Button.svelte';
 	import { parameters } from '$lib/store';
+	import { createEventDispatcher } from 'svelte'
+
+	const dispatch = createEventDispatcher()
 
 	export let instance;
 	export let path;
@@ -20,7 +23,10 @@
 		}
 		const response = await api(path.method, path.path, null, fields);
 		const data = await response.json();
-		console.log(data);
+		const name = path.path.split('/').pop();
+		dispatch('completed', {
+			name
+		})
 		loading = false;
 	};
 

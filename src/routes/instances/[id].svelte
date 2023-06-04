@@ -118,6 +118,7 @@
 		const data = await response.json();
 		console.log(data);
 		loading = { all: false, zip: false };
+		instance = data;
 	};
 
 	const makeZip = async () => {
@@ -143,6 +144,13 @@
 			goto(base ? base : '/');
 		}
 	};
+
+	function formCompleted({detail: {name}}){
+		console.log('formCompleted', name);
+		if(instance) {
+			instance[name] = true;
+		}
+	}
 
 	console.log('base', base);
 </script>
@@ -277,5 +285,5 @@
 <h2 class="mt-8 mb-6">Advanced Settings</h2>
 
 {#each $apiPaths as path}
-	<Form {instance} {path} />
+	<Form {instance} {path} on:completed={formCompleted} />
 {/each}
