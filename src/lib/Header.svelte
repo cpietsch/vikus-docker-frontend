@@ -1,7 +1,7 @@
 <script>
 	import { page } from '$app/stores';
 	import { base } from '$app/paths';
-	import { api, domain, port, protocoll } from '$lib/api';
+	import { api } from '$lib/api';
 </script>
 
 <div class="sticky top-0 z-40 w-full flex-none duration-500 lg:z-50 ">
@@ -39,7 +39,7 @@
 							<li>
 								<a
 									class="hover:text-sky-500 dark:hover:text-sky-400"
-									href="{protocoll}://{domain}:{port}/docs">API</a
+									href="/api/docs">API</a
 								>
 							</li>
 							<!-- <li>

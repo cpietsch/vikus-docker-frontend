@@ -32,7 +32,6 @@
 	export let instance;
 
 	import { onDestroy } from 'svelte';
-	import { domain, protocoll, port, portWeb } from '$lib/api';
 	import { apiPaths, loadInstances } from '$lib/store';
 	import { goto } from '$app/navigation';
 	import { base } from '$app/paths';
@@ -62,7 +61,8 @@
 		if (webSocket) {
 			webSocket.close();
 		}
-		webSocket = new WebSocket(`ws://${domain}:${port}/instances/${instance.id}/ws`);
+		const wsProtocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:';
+		webSocket = new WebSocket(`${wsProtocol}//${window.location.host}/api/instances/${instance.id}/ws`);
 		webSocket.onopen = (e) => {
 			console.log('eventSource.onopen', e);
 			connected = true;
@@ -127,7 +127,7 @@
 			instance_id: instance.id
 		});
 		const data = await response.json();
-		const zipUrl = `${protocoll}://${domain}:${portWeb}/data/${instance.id}/project.zip`;
+		const zipUrl = `/data/${instance.id}/project.zip`;
 		var a = document.createElement('a');
 		a.href = zipUrl;
 		a.setAttribute('download', 'project.zip');
@@ -211,7 +211,7 @@
 			<a
 				target="_blank"
 				class="font-semibold rounded-full px-2 bg-blue-100"
-				href="{protocoll}://{domain}:{portWeb}/viewer/?config=../data/{instance.id}/config.json"
+				href="/viewer/?config=../data/{instance.id}/config.json"
 				>Open</a
 			>
 		</div>
@@ -224,7 +224,7 @@
 			<a
 				target="_blank"
 				class="font-semibold rounded-full px-2 bg-blue-100"
-				href="{protocoll}://{domain}:{portWeb}/data/{instance.id}">Open</a
+				href="/data/{instance.id}">Open</a
 			>
 		</div>
 	</div>
