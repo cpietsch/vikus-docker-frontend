@@ -1,6 +1,6 @@
 {
   ".svelte-kit/runtime/client/start.js": {
-    "file": "start-467f713c.js",
+    "file": "start-27d23044.js",
     "src": ".svelte-kit/runtime/client/start.js",
     "isEntry": true,
     "imports": [
@@ -19,16 +19,16 @@
     ]
   },
   "src/routes/__layout.svelte": {
-    "file": "pages/__layout.svelte-2d6236d8.js",
+    "file": "pages/__layout.svelte-e59382e0.js",
     "src": "src/routes/__layout.svelte",
     "isEntry": true,
     "isDynamicEntry": true,
     "imports": [
       "_index-74cce875.js",
       "_paths-396f020f.js",
-      "_api-a1f7356f.js",
-      "_store-f4baad70.js",
-      "_index-cc58445c.js"
+      "_store-09b84b1a.js",
+      "_index-cc58445c.js",
+      "_api-2e72442c.js"
     ],
     "css": [
       "assets/pages/__layout.svelte-7187481a.css"
@@ -62,27 +62,27 @@
     ]
   },
   "src/routes/index.svelte": {
-    "file": "pages/index.svelte-4f51ab87.js",
+    "file": "pages/index.svelte-d08b67d9.js",
     "src": "src/routes/index.svelte",
     "isEntry": true,
     "isDynamicEntry": true,
     "imports": [
       "_index-74cce875.js",
-      "_api-a1f7356f.js",
+      "_api-2e72442c.js",
       "_navigation-0e6511d1.js",
       "_paths-396f020f.js",
       "_singletons-d1fb5791.js"
     ]
   },
   "src/routes/instances/[id].svelte": {
-    "file": "pages/instances/_id_.svelte-a77a967b.js",
+    "file": "pages/instances/_id_.svelte-b0ae0e03.js",
     "src": "src/routes/instances/[id].svelte",
     "isEntry": true,
     "isDynamicEntry": true,
     "imports": [
       "_index-74cce875.js",
-      "_api-a1f7356f.js",
-      "_store-f4baad70.js",
+      "_api-2e72442c.js",
+      "_store-09b84b1a.js",
       "_navigation-0e6511d1.js",
       "_paths-396f020f.js",
       "_index-cc58445c.js",
@@ -115,15 +115,15 @@
   "_singletons-d1fb5791.js": {
     "file": "chunks/singletons-d1fb5791.js"
   },
-  "_api-a1f7356f.js": {
-    "file": "chunks/api-a1f7356f.js"
-  },
-  "_store-f4baad70.js": {
-    "file": "chunks/store-f4baad70.js",
+  "_store-09b84b1a.js": {
+    "file": "chunks/store-09b84b1a.js",
     "imports": [
       "_index-cc58445c.js",
-      "_api-a1f7356f.js"
+      "_api-2e72442c.js"
     ]
+  },
+  "_api-2e72442c.js": {
+    "file": "chunks/api-2e72442c.js"
   },
   "_navigation-0e6511d1.js": {
     "file": "chunks/navigation-0e6511d1.js",
